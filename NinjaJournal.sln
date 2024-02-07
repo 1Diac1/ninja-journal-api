@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3679E61E-A14C-4921-8D89-0C161FCE603C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{6B21EE11-9C77-4762-A2A0-19C20DF95B8B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{5C8C2DFD-D49C-40D7-83A9-B394E2CC914F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.Microservice.Common", "src\Common\NinjaJournal.Microservice.Common\NinjaJournal.Microservice.Common.csproj", "{28E1423C-744E-4269-87AC-431804F0A559}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{53A0DB45-28E2-415E-B27D-7824901EA460}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6B21EE11-9C77-4762-A2A0-19C20DF95B8B} = {3679E61E-A14C-4921-8D89-0C161FCE603C}
+		{5C8C2DFD-D49C-40D7-83A9-B394E2CC914F} = {3679E61E-A14C-4921-8D89-0C161FCE603C}
+		{28E1423C-744E-4269-87AC-431804F0A559} = {6B21EE11-9C77-4762-A2A0-19C20DF95B8B}
+		{53A0DB45-28E2-415E-B27D-7824901EA460} = {3679E61E-A14C-4921-8D89-0C161FCE603C}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28E1423C-744E-4269-87AC-431804F0A559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28E1423C-744E-4269-87AC-431804F0A559}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28E1423C-744E-4269-87AC-431804F0A559}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28E1423C-744E-4269-87AC-431804F0A559}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
