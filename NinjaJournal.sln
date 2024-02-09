@@ -10,6 +10,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.Microservice.C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateway", "ApiGateway", "{53A0DB45-28E2-415E-B27D-7824901EA460}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.Common.Logging", "src\Common\NinjaJournal.Common.Logging\NinjaJournal.Common.Logging.csproj", "{8DF30A27-2174-4DE1-81AF-B5F8C23F7674}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StudentsManagementService", "StudentsManagementService", "{D6CC9575-DB9B-4F76-BC7B-06DB0B30B243}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.StudentsManagement.API", "src\Microservices\StudentsManagementService\NinjaJournal.StudentsManagement.API\NinjaJournal.StudentsManagement.API.csproj", "{8F7D3E0E-C81B-4B0A-9898-2474574B59F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,11 +26,22 @@ Global
 		{5C8C2DFD-D49C-40D7-83A9-B394E2CC914F} = {3679E61E-A14C-4921-8D89-0C161FCE603C}
 		{28E1423C-744E-4269-87AC-431804F0A559} = {6B21EE11-9C77-4762-A2A0-19C20DF95B8B}
 		{53A0DB45-28E2-415E-B27D-7824901EA460} = {3679E61E-A14C-4921-8D89-0C161FCE603C}
+		{8DF30A27-2174-4DE1-81AF-B5F8C23F7674} = {6B21EE11-9C77-4762-A2A0-19C20DF95B8B}
+		{D6CC9575-DB9B-4F76-BC7B-06DB0B30B243} = {5C8C2DFD-D49C-40D7-83A9-B394E2CC914F}
+		{8F7D3E0E-C81B-4B0A-9898-2474574B59F2} = {D6CC9575-DB9B-4F76-BC7B-06DB0B30B243}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{28E1423C-744E-4269-87AC-431804F0A559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28E1423C-744E-4269-87AC-431804F0A559}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28E1423C-744E-4269-87AC-431804F0A559}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28E1423C-744E-4269-87AC-431804F0A559}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DF30A27-2174-4DE1-81AF-B5F8C23F7674}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DF30A27-2174-4DE1-81AF-B5F8C23F7674}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DF30A27-2174-4DE1-81AF-B5F8C23F7674}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DF30A27-2174-4DE1-81AF-B5F8C23F7674}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F7D3E0E-C81B-4B0A-9898-2474574B59F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F7D3E0E-C81B-4B0A-9898-2474574B59F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F7D3E0E-C81B-4B0A-9898-2474574B59F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F7D3E0E-C81B-4B0A-9898-2474574B59F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,11 +1,11 @@
-﻿using NinjaJournal.Microservice.Common.Repositories;
+﻿using NinjaJournal.Microservice.Common.Specifications;
+using NinjaJournal.Microservice.Common.Repositories;
 using NinjaJournal.Microservice.Common.Helpers;
 using NinjaJournal.Microservice.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ardalis.GuardClauses;
 using AutoMapper;
-using NinjaJournal.Microservice.Common.Specifications;
 
 namespace NinjaJournal.Microservice.Common.Controllers;
 
