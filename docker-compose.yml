@@ -5,7 +5,7 @@ services:
   students-management-service:
     build:
       context: .
-      dockerfile: src/Microservices/StudentsManagementService/NinjaJournal.StudentsManagement.API/Dockerfile
+      dockerfile: src/Microservices/StudentsManagementService/NinjaJournal.StudentsManagement.Api/Dockerfile
     ports:
       - 5000:80
     environment:
