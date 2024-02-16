@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StudentsManagementService",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.StudentsManagement.Domain", "src\Microservices\StudentsManagementService\NinjaJournal.StudentsManagement.Domain\NinjaJournal.StudentsManagement.Domain.csproj", "{0E8A606A-B1D7-4F8E-ACC8-F1FA8D88E9D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.StudentsManagement.Infrastructure", "src\Microservices\StudentsManagementService\NinjaJournal.StudentsManagement.Infrastructure\NinjaJournal.StudentsManagement.Infrastructure.csproj", "{5EC07B72-14F1-4053-B708-05DC90CD60AA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.StudentsManagement.Infrastructure.Postgresql", "src\Microservices\StudentsManagementService\NinjaJournal.StudentsManagement.Infrastructure.Postgresql\NinjaJournal.StudentsManagement.Infrastructure.Postgresql.csproj", "{5EC07B72-14F1-4053-B708-05DC90CD60AA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.Microservice.Api.AspNetCore", "src\Common\NinjaJournal.Microservice.Api.AspNetCore\NinjaJournal.Microservice.Api.AspNetCore.csproj", "{9C35DF3A-0502-4EC9-A4A5-382E167F446B}"
 EndProject
@@ -27,6 +27,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore", "src\Common\NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore\NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore.csproj", "{28DC4C6F-1906-4AB9-B826-E84A5FEF18DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.StudentsManagement.Api", "src\Microservices\StudentsManagementService\NinjaJournal.StudentsManagement.Api\NinjaJournal.StudentsManagement.Api.csproj", "{5EA9CFC6-F6B7-4518-AE11-1DD1CC47BF65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.StudentsManagement.Application", "src\Microservices\StudentsManagementService\NinjaJournal.StudentsManagement.Application\NinjaJournal.StudentsManagement.Application.csproj", "{5B31078D-411F-4C98-BB3A-5C712CA2A347}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,7 @@ Global
 		{4443B724-8723-43D4-ABDC-E12D3DAAD74F} = {6B21EE11-9C77-4762-A2A0-19C20DF95B8B}
 		{28DC4C6F-1906-4AB9-B826-E84A5FEF18DE} = {6B21EE11-9C77-4762-A2A0-19C20DF95B8B}
 		{5EA9CFC6-F6B7-4518-AE11-1DD1CC47BF65} = {D6CC9575-DB9B-4F76-BC7B-06DB0B30B243}
+		{5B31078D-411F-4C98-BB3A-5C712CA2A347} = {D6CC9575-DB9B-4F76-BC7B-06DB0B30B243}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{28E1423C-744E-4269-87AC-431804F0A559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -85,5 +88,9 @@ Global
 		{5EA9CFC6-F6B7-4518-AE11-1DD1CC47BF65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EA9CFC6-F6B7-4518-AE11-1DD1CC47BF65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EA9CFC6-F6B7-4518-AE11-1DD1CC47BF65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B31078D-411F-4C98-BB3A-5C712CA2A347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B31078D-411F-4C98-BB3A-5C712CA2A347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B31078D-411F-4C98-BB3A-5C712CA2A347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B31078D-411F-4C98-BB3A-5C712CA2A347}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -2,7 +2,7 @@
 using NinjaJournal.Common.Logging;
 using Serilog;
 
-namespace NinjaJournal.Microservice.Core.Extensions;
+namespace NinjaJournal.Microservice.Api.AspNetCore.Extensions;
 
 public static class ServiceExtensions
 {

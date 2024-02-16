@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Infrastructure.Abstractions\NinjaJournal.Microservice.Infrastructure.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore\NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\NinjaJournal.StudentsManagement.Domain\NinjaJournal.StudentsManagement.Domain.csproj" />
+      <ProjectReference Include="..\NinjaJournal.StudentsManagement.Infrastructure.Postgresql\NinjaJournal.StudentsManagement.Infrastructure.Postgresql.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+    </ItemGroup>
+
+</Project>

@@ -1,11 +1,16 @@
-using NinjaJournal.Microservice.Core.Extensions;
+using NinjaJournal.StudentsManagement.Infrastructure.Postgresql;
+using NinjaJournal.Microservice.Api.AspNetCore.Extensions;
+using NinjaJournal.StudentsManagement.Application;
+using NinjaJournal.Microservice.Api.AspNetCore;
 using Serilog;
 
-var builder = WebApplicatio n.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddStudentsManagementInfrastructureModule(builder.Configuration);
+builder.Services.AddStudentsManagementApplicationModule();
 
 builder.AddSerilog();
-
-builder.Services.AddControllers();
+builder.Services.AddAspNetCoreModule();
 
 var app = builder.Build();
 

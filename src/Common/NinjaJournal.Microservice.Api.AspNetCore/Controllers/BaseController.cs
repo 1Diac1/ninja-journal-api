@@ -23,7 +23,6 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     protected readonly IEntityRepository<TKey, TEntity> EntityRepository;
     protected readonly IMapper Mapper;
 
-
     protected BaseController(IReadEntityRepository<TKey, TEntity> readEntityRepository, 
         ILogger<BaseController<TKey, TEntity, TEntityDto>> logger, IEntityRepository<TKey, TEntity> entityRepository, IMapper mapper)
     {
@@ -63,7 +62,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     [HttpPost]
     public async Task<BaseResponse> CreateAsync([FromBody] TEntityDto entityDto, CancellationToken cancellationToken)
     {
-        Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
+        //Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
 
         var mappedEntity = Mapper.Map<TEntity>(entityDto);
 
@@ -75,12 +74,12 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     }
 
     [HttpPut]
-    public async Task<BaseResponse> UpdateAsync([FromBody] TEntityDto entityDto, TKey id, CancellationToken cancellationToken)
+    public async Task<BaseResponse> UpdateAsync([FromBody] TEntityDto entityDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
-        Guard.Against.Null(id, nameof(id), ErrorMessages.CantBeNullOrEmpty);
+        Guard.Against.Null(entityDto.Id, nameof(entityDto.Id), ErrorMessages.CantBeNullOrEmpty);
 
-        var entityToUpdate = await ReadEntityRepository.GetByIdAsync(id, true, cancellationToken);
+        var entityToUpdate = await ReadEntityRepository.GetByIdAsync(entityDto.Id, true, cancellationToken);
 
         Guard.Against.Null(entityToUpdate);
 
