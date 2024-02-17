@@ -4,6 +4,7 @@ using NinjaJournal.StudentsManagement.Application.Dtos;
 using NinjaJournal.StudentsManagement.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using FluentValidation;
 
 namespace NinjaJournal.StudentsManagement.Api.Controllers;
 
@@ -11,12 +12,13 @@ namespace NinjaJournal.StudentsManagement.Api.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class StudentsController : BaseController<Guid, Student, StudentDto>
 {
-    public StudentsController(IReadEntityRepository<Guid, Student> readEntityRepository, 
+    public StudentsController(IReadEntityRepository<Guid, Student> readEntityRepository,
         ILogger<BaseController<Guid, Student, StudentDto>> logger, 
-        IEntityRepository<Guid, Student> entityRepository, IMapper mapper) 
-        : base(readEntityRepository, logger, entityRepository, mapper)
+        IEntityRepository<Guid, Student> entityRepository, 
+        IValidator<StudentDto> validator, IMapper mapper) 
+        : base(readEntityRepository, logger, entityRepository, validator, mapper)
     { }
-
+    
     [HttpGet]
     [Route("get-something")]
     public string GetSomethingString()

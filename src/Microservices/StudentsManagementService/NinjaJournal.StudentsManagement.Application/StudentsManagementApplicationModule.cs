@@ -4,6 +4,7 @@ using NinjaJournal.StudentsManagement.Infrastructure.Postgresql;
 using NinjaJournal.StudentsManagement.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using FluentValidation;
 
 namespace NinjaJournal.StudentsManagement.Application;
 
@@ -13,6 +14,7 @@ public static class StudentsManagementApplicationModule
     {
         services.AddScoped<IEntityRepository<Guid, Student>, BaseEntityRepository<Guid, Student, StudentsManagementDbContext>>();
         services.AddScoped<IReadEntityRepository<Guid, Student>, BaseReadEntityRepository<Guid, Student, StudentsManagementDbContext>>();
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
     }
 }
