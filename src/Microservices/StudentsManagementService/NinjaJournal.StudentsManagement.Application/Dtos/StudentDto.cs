@@ -9,4 +9,5 @@ public class StudentDto : BaseEntityDto<Guid>
     public string MiddleName { get; set; }
     public string Email { get; set; }
     public bool IsHeadOfGroup { get; set; }
+    public Guid GroupId { get; set; }
 }

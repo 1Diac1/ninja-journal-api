@@ -11,6 +11,7 @@ public class ApiExceptionFilter : ExceptionFilterAttribute
         new Dictionary<Type, Action<ExceptionContext>>
         {
             [typeof(ArgumentException)] = HandleArgumentException,
+            [typeof(ArgumentNullException)] = HandleArgumentException,
             [typeof(BadRequestException)] = HandleBadRequestException,
             [typeof(NotFoundException)] = HandleNotFoundException,
             [typeof(ValidationException)] = HandleFluentValidationException,

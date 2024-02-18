@@ -11,6 +11,6 @@ public static class GuardExtensions
         guardClause.Null(key, nameof(key));
 
         if (input is null)
-            throw new Core.Exceptions.NotFoundException(nameof(input), key);
+            throw new Core.Exceptions.NotFoundException(typeof(T).Name, key);
     }
 }

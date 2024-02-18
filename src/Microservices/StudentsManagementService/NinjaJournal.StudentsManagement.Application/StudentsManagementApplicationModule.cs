@@ -14,6 +14,9 @@ public static class StudentsManagementApplicationModule
     {
         services.AddScoped<IEntityRepository<Guid, Student>, BaseEntityRepository<Guid, Student, StudentsManagementDbContext>>();
         services.AddScoped<IReadEntityRepository<Guid, Student>, BaseReadEntityRepository<Guid, Student, StudentsManagementDbContext>>();
+        
+        services.AddScoped<IEntityRepository<Guid, Group>, BaseEntityRepository<Guid, Group, StudentsManagementDbContext>>();
+        services.AddScoped<IReadEntityRepository<Guid, Group>, BaseReadEntityRepository<Guid, Group, StudentsManagementDbContext>>();
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
     }

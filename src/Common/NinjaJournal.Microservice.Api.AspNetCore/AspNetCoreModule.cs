@@ -22,8 +22,6 @@ public static class AspNetCoreModule
             options.ModelValidatorProviders.Clear();
         })
             .AddNewtonsoftJson();
-
-        services.AddFluentValidationAutoValidation();
     }
 
     private static void ConfigureCors(IServiceCollection services)

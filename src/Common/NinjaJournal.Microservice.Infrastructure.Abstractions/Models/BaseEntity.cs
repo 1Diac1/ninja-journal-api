@@ -3,7 +3,7 @@
 public abstract class BaseEntity<TKey>  
     where TKey : struct
 {
-    public TKey Id { get; protected set; }
+    public TKey Id { get; set; }
 
     protected BaseEntity() { }
 

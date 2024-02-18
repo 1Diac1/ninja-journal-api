@@ -12,4 +12,9 @@ public class Student : BaseEntity<Guid>
     public Guid GroupId { get; set; }
 
     public Group Group { get; set; }
+
+    public Student()
+    {
+        Id = Guid.NewGuid();
+    }
 }

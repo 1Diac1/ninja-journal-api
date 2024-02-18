@@ -9,4 +9,8 @@ public class Group : BaseEntity<Guid>
 
     public ICollection<Student> Students { get; set; }
 
+    public Group()
+    {
+        Id = Guid.NewGuid();
+    }
 }

@@ -10,12 +10,14 @@ namespace NinjaJournal.StudentsManagement.Api.Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
-public class StudentsController : BaseController<Guid, Student, StudentDto>
+public class GroupsController : BaseController<Guid, Group, GroupDto>
 {
-    public StudentsController(IReadEntityRepository<Guid, Student> readEntityRepository,
-        ILogger<BaseController<Guid, Student, StudentDto>> logger, 
-        IEntityRepository<Guid, Student> entityRepository, 
-        IValidator<StudentDto> validator, IMapper mapper) 
+    public GroupsController(IReadEntityRepository<Guid, Group> readEntityRepository,
+        ILogger<BaseController<Guid, Group, GroupDto>> logger, 
+        IEntityRepository<Guid, Group> entityRepository, 
+        IValidator<GroupDto> validator, IMapper mapper) 
         : base(readEntityRepository, logger, entityRepository, validator, mapper)
     { }
+    
+    
 }

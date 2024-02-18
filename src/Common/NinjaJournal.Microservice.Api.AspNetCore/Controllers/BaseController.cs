@@ -68,11 +68,13 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     [HttpPost]
     public virtual async Task<BaseResponse> CreateAsync([FromBody] TEntityDto entityDto, CancellationToken cancellationToken)
     {
+        Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
+        
         var validationResult = await Validator.ValidateAsync(entityDto, cancellationToken);
 
         if (validationResult.IsValid is false)
             throw new ValidationException(validationResult.Errors);
-
+    
         var mappedEntity = Mapper.Map<TEntity>(entityDto);
 
         await EntityRepository.AddAsync(mappedEntity, true, cancellationToken);
