@@ -1,4 +1,4 @@
-﻿using NinjaJournal.StudentsManagement.Application.Dtos;
+﻿using NinjaJournal.StudentsManagement.Application.Dtos.Group;
 using NinjaJournal.StudentsManagement.Domain.Entities;
 using AutoMapper;
 

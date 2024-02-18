@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using NinjaJournal.StudentsManagement.Application.Dtos;
+﻿using NinjaJournal.StudentsManagement.Application.Dtos.Student;
 using NinjaJournal.StudentsManagement.Domain.Entities;
+using AutoMapper;
 
 namespace NinjaJournal.StudentsManagement.Application.Mappings;
 

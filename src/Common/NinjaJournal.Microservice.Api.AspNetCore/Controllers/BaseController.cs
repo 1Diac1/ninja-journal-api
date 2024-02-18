@@ -14,25 +14,24 @@ namespace NinjaJournal.Microservice.Api.AspNetCore.Controllers;
 
 [ApiController]
 [AllowAnonymous]
-public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
+public abstract class BaseController<TKey, TEntity, TEntityDto, TUpdateEntityDto> : ControllerBase
     where TKey : struct
     where TEntity : BaseEntity<TKey>
     where TEntityDto : BaseEntityDto<TKey>
-
+    where TUpdateEntityDto : BaseUpdateEntityDto<TKey>
 {
     protected readonly IReadEntityRepository<TKey, TEntity> ReadEntityRepository;
-    protected readonly ILogger<BaseController<TKey, TEntity, TEntityDto>> Logger;
+    protected readonly ILogger<BaseController<TKey, TEntity, TEntityDto, TUpdateEntityDto>> Logger;
     protected readonly IEntityRepository<TKey, TEntity> EntityRepository;
     protected readonly IValidator<TEntityDto> Validator;
     protected readonly IMapper Mapper;
 
-
     protected BaseController(IReadEntityRepository<TKey, TEntity> readEntityRepository, 
-        ILogger<BaseController<TKey, TEntity, TEntityDto>> logger, 
+        ILogger<BaseController<TKey, TEntity, TEntityDto, TUpdateEntityDto>> logger, 
         IEntityRepository<TKey, TEntity> entityRepository, IValidator<TEntityDto> validator, IMapper mapper)
     {
         ReadEntityRepository = readEntityRepository ?? throw new ArgumentException(nameof(IReadEntityRepository<TKey, TEntity>));
-        Logger = logger ?? throw new ArgumentException(nameof(ILogger<BaseController<TKey, TEntity, TEntityDto>>));
+        Logger = logger ?? throw new ArgumentException(nameof(ILogger<BaseController<TKey, TEntity, TEntityDto, TUpdateEntityDto>>));
         EntityRepository = entityRepository ?? throw new ArgumentException(nameof(IEntityRepository<TKey, TEntity>));
         Validator = validator ?? throw new ArgumentException(nameof(IValidator<TEntityDto>));
         Mapper = mapper ?? throw new ArgumentException(nameof(IMapper));
@@ -87,6 +86,8 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     [HttpPut]
     public async Task<BaseResponse> UpdateAsync([FromBody] TEntityDto entityDto, CancellationToken cancellationToken)
     {
+        Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
+        
         var validationResult = await Validator.ValidateAsync(entityDto, cancellationToken);
 
         if (validationResult.IsValid is false)

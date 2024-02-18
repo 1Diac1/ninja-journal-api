@@ -1,5 +1,4 @@
-﻿using FluentValidation.AspNetCore;
-using NinjaJournal.Microservice.Api.AspNetCore.Filters;
+﻿using NinjaJournal.Microservice.Api.AspNetCore.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
 
