@@ -1,5 +1,4 @@
-﻿using NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore.Specifications;
-using NinjaJournal.StudentsManagement.Infrastructure.Postgresql.Specifications;
+﻿using NinjaJournal.StudentsManagement.Infrastructure.Postgresql.Specifications;
 using NinjaJournal.Microservice.Infrastructure.Abstractions.Repositories;
 using NinjaJournal.Microservice.Api.AspNetCore.Controllers;
 using NinjaJournal.StudentsManagement.Application.Dtos;
@@ -20,7 +19,6 @@ public class StudentsController : BaseController<Guid, Student, StudentDto>
         IValidator<StudentDto> validator, IMapper mapper)
         : base(logger, readEntityRepository, entityRepository, validator, mapper)
     {
-        Specifications.Add(new EntityWithLimitSpecification<Student>(1000));
         Specifications.Add(new StudentIncludeSpecification());
     }
 }

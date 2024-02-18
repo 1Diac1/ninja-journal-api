@@ -44,6 +44,8 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     {
         Guard.Against.OutOfRange(limit, nameof(limit), 1, 10000);
 
+        Specifications.Add(new EntityWithLimitSpecification<TEntity>(limit));
+        
         var entities = await ReadEntityRepository.GetAllAsync(Specifications, true, cancellationToken);
         var mappedEntities = Mapper.Map<IReadOnlyCollection<TEntityDto>>(entities);
 
@@ -52,8 +54,8 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
 
     [HttpGet("{id}")]
     public virtual async Task<DataResponse<TEntityDto>> GetAsync(TKey id, CancellationToken cancellationToken)
-    {
-        Guard.Against.Null(id, nameof(id), ErrorMessages.CantBeNullOrEmpty);
+    { 
+        Guard.Against.NullOrEmpty(id, nameof(id), ErrorMessages.CantBeNullOrEmpty);
         
         var entity = await ReadEntityRepository.GetByIdAsync(id, true, cancellationToken);
 
@@ -87,6 +89,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     public async Task<BaseResponse> UpdateAsync([FromBody] TEntityDto entityDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
+        Guard.Against.NullOrEmpty(entityDto.Id, nameof(entityDto.Id), ErrorMessages.CantBeNullOrEmpty);
         
         var validationResult = await Validator.ValidateAsync(entityDto, cancellationToken);
 
@@ -109,7 +112,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     [HttpDelete("{id}")]
     public async Task<BaseResponse> DeleteAsync(TKey id, CancellationToken cancellationToken)
     {
-        Guard.Against.Null(id, nameof(id), ErrorMessages.CantBeNullOrEmpty);
+        Guard.Against.NullOrEmpty(id, nameof(id), ErrorMessages.CantBeNullOrEmpty);
 
         var entity = await ReadEntityRepository.GetByIdAsync(id, true, cancellationToken);
 
