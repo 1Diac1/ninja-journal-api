@@ -1,6 +1,7 @@
 ﻿using NinjaJournal.Microservice.Api.AspNetCore.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace NinjaJournal.Microservice.Api.AspNetCore;
 

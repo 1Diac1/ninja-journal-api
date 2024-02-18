@@ -1,6 +1,6 @@
 ﻿using NinjaJournal.Microservice.Infrastructure.Abstractions.Models;
 
-namespace NinjaJournal.StudentsManagement.Application.Dtos.Group;
+namespace NinjaJournal.StudentsManagement.Application.Dtos;
 
 public class GroupDto : BaseEntityDto<Guid>
 {

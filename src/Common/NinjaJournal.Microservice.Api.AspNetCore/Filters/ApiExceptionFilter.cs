@@ -12,6 +12,7 @@ public class ApiExceptionFilter : ExceptionFilterAttribute
         {
             [typeof(ArgumentException)] = HandleArgumentException,
             [typeof(ArgumentNullException)] = HandleArgumentException,
+            [typeof(ArgumentOutOfRangeException)] = HandleArgumentException,
             [typeof(BadRequestException)] = HandleBadRequestException,
             [typeof(NotFoundException)] = HandleNotFoundException,
             [typeof(ValidationException)] = HandleFluentValidationException,

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using NinjaJournal.StudentsManagement.Application.Dtos.Group;
+using NinjaJournal.StudentsManagement.Application.Dtos;
 
 namespace NinjaJournal.StudentsManagement.Application.Validators;
 

@@ -41,7 +41,23 @@ public class BaseReadEntityRepository<TKey, TEntity, TDbContext> : IReadEntityRe
 
     public virtual async Task<IReadOnlyCollection<TEntity>> GetAllAsync(ISpecification<TEntity> spec, bool disableTracking = true, CancellationToken cancellationToken = default)
     {
-        IQueryable<TEntity> query = this.ApplySpecification(spec);
+        IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+        
+        query = this.ApplySpecification(query, spec);
+
+        if (disableTracking is true)
+            query = query.AsNoTracking();
+
+        return await query.ToListAsync(cancellationToken);
+    }
+    
+    public virtual async Task<IReadOnlyCollection<TEntity>> GetAllAsync(IList<ISpecification<TEntity>> specs, bool disableTracking = true, CancellationToken cancellationToken = default)
+    {
+        IQueryable<TEntity> query = _dbContext.Set<TEntity>();
+
+        foreach (var specification in specs)
+            query = this.ApplySpecification(query, specification);
+        
 
         if (disableTracking is true)
             query = query.AsNoTracking();
@@ -69,8 +85,8 @@ public class BaseReadEntityRepository<TKey, TEntity, TDbContext> : IReadEntityRe
         return await query.FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
     }
 
-    private IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> specification)
+    private IQueryable<TEntity> ApplySpecification(IQueryable<TEntity> query, ISpecification<TEntity> specification)
     {
-        return SpecificationEvaluator.Default.GetQuery(_dbContext.Set<TEntity>().AsQueryable(), specification);
+        return SpecificationEvaluator.Default.GetQuery(query.AsQueryable(), specification);
     }
 }

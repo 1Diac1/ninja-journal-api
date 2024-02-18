@@ -3,9 +3,9 @@ using NinjaJournal.StudentsManagement.Domain.Entities;
 
 namespace NinjaJournal.StudentsManagement.Infrastructure.Postgresql.Specifications;
 
-public sealed class EntityIncludeSpecification : Specification<Student>
+public sealed class StudentIncludeSpecification : Specification<Student>
 {
-    public EntityIncludeSpecification()
+    public StudentIncludeSpecification()
     {
         Query.Include(s => s.Group);
     }

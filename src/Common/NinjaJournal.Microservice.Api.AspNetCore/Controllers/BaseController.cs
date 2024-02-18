@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Ardalis.GuardClauses;
+using Ardalis.Specification;
 using FluentValidation;
 using AutoMapper;
 
@@ -14,37 +15,36 @@ namespace NinjaJournal.Microservice.Api.AspNetCore.Controllers;
 
 [ApiController]
 [AllowAnonymous]
-public abstract class BaseController<TKey, TEntity, TEntityDto, TUpdateEntityDto> : ControllerBase
+public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     where TKey : struct
     where TEntity : BaseEntity<TKey>
     where TEntityDto : BaseEntityDto<TKey>
-    where TUpdateEntityDto : BaseUpdateEntityDto<TKey>
 {
+    protected readonly ILogger<BaseController<TKey, TEntity, TEntityDto>> Logger;
     protected readonly IReadEntityRepository<TKey, TEntity> ReadEntityRepository;
-    protected readonly ILogger<BaseController<TKey, TEntity, TEntityDto, TUpdateEntityDto>> Logger;
     protected readonly IEntityRepository<TKey, TEntity> EntityRepository;
+    protected readonly IList<ISpecification<TEntity>> Specifications;
     protected readonly IValidator<TEntityDto> Validator;
     protected readonly IMapper Mapper;
 
-    protected BaseController(IReadEntityRepository<TKey, TEntity> readEntityRepository, 
-        ILogger<BaseController<TKey, TEntity, TEntityDto, TUpdateEntityDto>> logger, 
-        IEntityRepository<TKey, TEntity> entityRepository, IValidator<TEntityDto> validator, IMapper mapper)
+    protected BaseController(ILogger<BaseController<TKey, TEntity, TEntityDto>> logger,
+        IReadEntityRepository<TKey, TEntity> readEntityRepository, IEntityRepository<TKey, TEntity> entityRepository,
+        IValidator<TEntityDto> validator, IMapper mapper)
     {
+        Logger = logger ?? throw new ArgumentException(nameof(ILogger<BaseController<TKey, TEntity, TEntityDto>>));
         ReadEntityRepository = readEntityRepository ?? throw new ArgumentException(nameof(IReadEntityRepository<TKey, TEntity>));
-        Logger = logger ?? throw new ArgumentException(nameof(ILogger<BaseController<TKey, TEntity, TEntityDto, TUpdateEntityDto>>));
         EntityRepository = entityRepository ?? throw new ArgumentException(nameof(IEntityRepository<TKey, TEntity>));
         Validator = validator ?? throw new ArgumentException(nameof(IValidator<TEntityDto>));
         Mapper = mapper ?? throw new ArgumentException(nameof(IMapper));
+        Specifications = new List<ISpecification<TEntity>>();
     }
 
     [HttpGet]
     public virtual async Task<DataResponse<IReadOnlyCollection<TEntityDto>>> GetAllAsync(int limit, CancellationToken cancellationToken)
     {
         Guard.Against.OutOfRange(limit, nameof(limit), 1, 10000);
-        
-        var spec = new EntityWithLimitSpecification<TEntity>(limit);
 
-        var entities = await ReadEntityRepository.GetAllAsync(spec, true, cancellationToken);
+        var entities = await ReadEntityRepository.GetAllAsync(Specifications, true, cancellationToken);
         var mappedEntities = Mapper.Map<IReadOnlyCollection<TEntityDto>>(entities);
 
         return DataResponse<IReadOnlyCollection<TEntityDto>>.Success(mappedEntities);

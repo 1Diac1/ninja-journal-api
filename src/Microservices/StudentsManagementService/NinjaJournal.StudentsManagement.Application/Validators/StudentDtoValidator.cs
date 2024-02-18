@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using NinjaJournal.Microservice.Infrastructure.Abstractions.Repositories;
-using NinjaJournal.StudentsManagement.Application.Dtos.Student;
+using NinjaJournal.StudentsManagement.Application.Dtos;
 
 namespace NinjaJournal.StudentsManagement.Application.Validators;
 
