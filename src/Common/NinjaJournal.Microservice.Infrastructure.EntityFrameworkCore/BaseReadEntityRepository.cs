@@ -57,7 +57,6 @@ public class BaseReadEntityRepository<TKey, TEntity, TDbContext> : IReadEntityRe
 
         foreach (var specification in specs)
             query = this.ApplySpecification(query, specification);
-        
 
         if (disableTracking is true)
             query = query.AsNoTracking();
