@@ -1,20 +1,26 @@
-﻿using NinjaJournal.Microservice.Api.AspNetCore.Filters;
+﻿using NinjaJournal.Microservice.Application.Abstractions.Services;
+using NinjaJournal.Microservice.Api.AspNetCore.Filters;
+using NinjaJournal.Microservice.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace NinjaJournal.Microservice.Api.AspNetCore;
 
 public static class AspNetCoreModule
 {
-    public static void AddAspNetCoreModule(this IServiceCollection services)
+    public static void AddAspNetCoreModule(this IServiceCollection services, IConfiguration configuration)
     {
         ConfigureCors(services);
 
         ConfigureApiVersioning(services);
 
+        ConfigureRedis(services, configuration);
+        
         services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
+
+        services.AddScoped<IRedisCacheService, RedisCacheService>();
         
         services.AddControllers(options =>
         {
@@ -24,6 +30,14 @@ public static class AspNetCoreModule
             .AddNewtonsoftJson();
     }
 
+    private static void ConfigureRedis(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis");
+        });
+    }
+    
     private static void ConfigureCors(IServiceCollection services)
     {
         services.AddCors(options =>

@@ -30,6 +30,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.StudentsManage
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.StudentsManagement.Application", "src\Microservices\StudentsManagementService\NinjaJournal.StudentsManagement.Application\NinjaJournal.StudentsManagement.Application.csproj", "{5B31078D-411F-4C98-BB3A-5C712CA2A347}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.Microservice.Application.Abstractions", "src\Common\NinjaJournal.Microservice.Application.Abstractions\NinjaJournal.Microservice.Application.Abstractions.csproj", "{0E848BF5-FB12-4B5E-8DFA-DA86F4B16693}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.Microservice.Application", "src\Common\NinjaJournal.Microservice.Application\NinjaJournal.Microservice.Application.csproj", "{409BA47C-1F80-47F5-A97A-9D61D6419380}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,8 @@ Global
 		{28DC4C6F-1906-4AB9-B826-E84A5FEF18DE} = {6B21EE11-9C77-4762-A2A0-19C20DF95B8B}
 		{5EA9CFC6-F6B7-4518-AE11-1DD1CC47BF65} = {D6CC9575-DB9B-4F76-BC7B-06DB0B30B243}
 		{5B31078D-411F-4C98-BB3A-5C712CA2A347} = {D6CC9575-DB9B-4F76-BC7B-06DB0B30B243}
+		{0E848BF5-FB12-4B5E-8DFA-DA86F4B16693} = {6B21EE11-9C77-4762-A2A0-19C20DF95B8B}
+		{409BA47C-1F80-47F5-A97A-9D61D6419380} = {6B21EE11-9C77-4762-A2A0-19C20DF95B8B}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{28E1423C-744E-4269-87AC-431804F0A559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -92,5 +98,13 @@ Global
 		{5B31078D-411F-4C98-BB3A-5C712CA2A347}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B31078D-411F-4C98-BB3A-5C712CA2A347}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B31078D-411F-4C98-BB3A-5C712CA2A347}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E848BF5-FB12-4B5E-8DFA-DA86F4B16693}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E848BF5-FB12-4B5E-8DFA-DA86F4B16693}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E848BF5-FB12-4B5E-8DFA-DA86F4B16693}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E848BF5-FB12-4B5E-8DFA-DA86F4B16693}.Release|Any CPU.Build.0 = Release|Any CPU
+		{409BA47C-1F80-47F5-A97A-9D61D6419380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{409BA47C-1F80-47F5-A97A-9D61D6419380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{409BA47C-1F80-47F5-A97A-9D61D6419380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{409BA47C-1F80-47F5-A97A-9D61D6419380}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

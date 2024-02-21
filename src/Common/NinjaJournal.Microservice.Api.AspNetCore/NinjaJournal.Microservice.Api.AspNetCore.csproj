@@ -14,9 +14,13 @@
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.16" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
+      <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.2" />
+      <PackageReference Include="StackExchange.Redis" Version="2.7.20" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\NinjaJournal.Microservice.Application.Abstractions\NinjaJournal.Microservice.Application.Abstractions.csproj" />
+      <ProjectReference Include="..\NinjaJournal.Microservice.Application\NinjaJournal.Microservice.Application.csproj" />
       <ProjectReference Include="..\NinjaJournal.Microservice.Core\NinjaJournal.Microservice.Core.csproj" />
       <ProjectReference Include="..\NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore\NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore.csproj" />
     </ItemGroup>

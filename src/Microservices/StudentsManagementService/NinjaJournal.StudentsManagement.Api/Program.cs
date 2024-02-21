@@ -10,7 +10,7 @@ builder.Services.AddStudentsManagementInfrastructureModule(builder.Configuration
 builder.Services.AddStudentsManagementApplicationModule();
 
 builder.AddSerilog();
-builder.Services.AddAspNetCoreModule();
+builder.Services.AddAspNetCoreModule(builder.Configuration);
 
 var app = builder.Build();
 

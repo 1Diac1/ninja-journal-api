@@ -1,5 +1,6 @@
 ﻿using NinjaJournal.StudentsManagement.Infrastructure.Postgresql.Specifications;
 using NinjaJournal.Microservice.Infrastructure.Abstractions.Repositories;
+using NinjaJournal.Microservice.Application.Abstractions.Services;
 using NinjaJournal.Microservice.Api.AspNetCore.Controllers;
 using NinjaJournal.StudentsManagement.Application.Dtos;
 using NinjaJournal.StudentsManagement.Domain.Entities;
@@ -13,11 +14,10 @@ namespace NinjaJournal.StudentsManagement.Api.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class StudentsController : BaseController<Guid, Student, StudentDto>
 {
-    public StudentsController(ILogger<BaseController<Guid, Student, StudentDto>> logger,
-        IReadEntityRepository<Guid, Student> readEntityRepository,
-        IEntityRepository<Guid, Student> entityRepository,
-        IValidator<StudentDto> validator, IMapper mapper)
-        : base(logger, readEntityRepository, entityRepository, validator, mapper)
+    public StudentsController(ILogger<BaseController<Guid, Student, StudentDto>> logger, 
+        IReadEntityRepository<Guid, Student> readEntityRepository, IEntityRepository<Guid, Student> entityRepository, 
+        IValidator<StudentDto> validator, IRedisCacheService redisCacheService, IMapper mapper) 
+        : base(logger, readEntityRepository, entityRepository, validator, redisCacheService, mapper)
     {
         Specifications.Add(new StudentIncludeSpecification());
     }

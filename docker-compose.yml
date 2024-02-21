@@ -58,6 +58,14 @@ services:
     networks:
       - elastic
 
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    
+
+
 networks:
   elastic:
     driver: bridge
