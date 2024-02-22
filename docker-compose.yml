@@ -5,15 +5,30 @@ services:
   students-management-service:
     build:
       context: .
-      dockerfile: src/Microservices/StudentsManagementService/NinjaJournal.StudentsManagement.API/Dockerfile
+      dockerfile: src/Microservices/StudentsManagementService/NinjaJournal.StudentsManagement.Api/Dockerfile
     ports:
       - 5000:80
     environment:
       - ElasticConfiguration__Uri=http://elasticsearch:9200
+      - ConnectionStrings__StudentsManagementDbContext=Host=students-management-db;Database=students-management-db;Username=students-management-db;Password=postgres
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - elasticsearch
-      - kibana
+      - students-management-db
+    networks:
+      - elastic
+
+  students-management-db:
+    container_name: students-management-db
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=students-management-db
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=students-management-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - students-management-db-data:/usr/share/postgresql/data
     networks:
       - elastic
 
@@ -36,11 +51,20 @@ services:
     ports:
       - 5601:5601
     depends_on:
-      - elasticsearch
+      - elasticsearch 
+      - students-management-service
     environment:
       - ELASTICSEARCH_URL=http://localhost:9200
     networks:
       - elastic
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    
+
 
 networks:
   elastic:
@@ -48,3 +72,4 @@ networks:
 
 volumes:
   elasticsearch-data: {}
+  students-management-db-data: {} 
