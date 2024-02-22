@@ -26,7 +26,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     protected readonly IEntityRepository<TKey, TEntity> EntityRepository;
     protected readonly IList<ISpecification<TEntity>> Specifications;
     protected readonly IValidator<TEntityDto> Validator;
-    protected IRedisCacheService RedisCacheService;
+    protected readonly IRedisCacheService RedisCacheService;
     protected readonly IMapper Mapper;
 
     protected BaseController(ILogger<BaseController<TKey, TEntity, TEntityDto>> logger,
