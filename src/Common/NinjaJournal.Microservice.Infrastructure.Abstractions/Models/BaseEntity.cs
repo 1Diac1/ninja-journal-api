@@ -1,6 +1,6 @@
 ﻿namespace NinjaJournal.Microservice.Infrastructure.Abstractions.Models;
 
-public abstract class BaseEntity<TKey>  
+public abstract class BaseEntity<TKey> : IAggregateRoot
     where TKey : struct
 {
     public TKey Id { get; set; }

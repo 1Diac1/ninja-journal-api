@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="IdentityServer4" Version="4.1.2" />
+      <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
+      <PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Common\NinjaJournal.Microservice.Core\NinjaJournal.Microservice.Core.csproj" />
+    </ItemGroup>
+
+</Project>

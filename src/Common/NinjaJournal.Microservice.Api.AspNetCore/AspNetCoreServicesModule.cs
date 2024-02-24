@@ -58,6 +58,11 @@ public static class AspNetCoreServicesModule
         }
     }
 
+    public static void AddAuthorizationServices(this IServiceCollection services)
+    {
+        services.AddAuthorization();
+    }
+
     private static void ConfigureAuthorizationServices(this IServiceCollection services)
     {
         services.AddAuthorization();
