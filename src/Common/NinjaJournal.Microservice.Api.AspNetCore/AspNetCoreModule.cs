@@ -11,11 +11,11 @@ public static class AspNetCoreModule
 {
     public static void AddAspNetCoreModule(this IServiceCollection services, IConfiguration configuration)
     {
-        ConfigureCors(services);
+        ConfigureCorsServices(services);
 
-        ConfigureApiVersioning(services);
+        ConfigureApiVersioningServices(services);
 
-        ConfigureRedis(services, configuration);
+        ConfigureRedisServices(services, configuration);
         
         services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
@@ -30,7 +30,12 @@ public static class AspNetCoreModule
             .AddNewtonsoftJson();
     }
 
-    private static void ConfigureRedis(IServiceCollection services, IConfiguration configuration)
+    private static void ConfigureAuthenticationServices(this IServiceCollection services)
+    {
+        
+    }
+    
+    private static void ConfigureRedisServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddStackExchangeRedisCache(options =>
         {
@@ -38,7 +43,7 @@ public static class AspNetCoreModule
         });
     }
     
-    private static void ConfigureCors(IServiceCollection services)
+    private static void ConfigureCorsServices(IServiceCollection services)
     {
         services.AddCors(options =>
         {
@@ -52,7 +57,7 @@ public static class AspNetCoreModule
         });
     }
 
-    private static void ConfigureApiVersioning(IServiceCollection services)
+    private static void ConfigureApiVersioningServices(IServiceCollection services)
     {
         services.AddApiVersioning(options =>
         {
