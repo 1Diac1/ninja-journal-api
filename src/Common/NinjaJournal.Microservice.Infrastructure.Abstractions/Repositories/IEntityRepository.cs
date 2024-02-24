@@ -2,7 +2,7 @@
 
 namespace NinjaJournal.Microservice.Infrastructure.Abstractions.Repositories;
 
-public interface IEntityRepository<TKey, TEntity> where TEntity : BaseEntity<TKey>
+public interface IEntityRepository<TKey, TEntity> where TEntity : IAggregateRoot<TKey>
     where TKey : struct
 {
     Task<TEntity> AddAsync(TEntity entity, bool autoSave = true, CancellationToken cancellationToken = default);

@@ -13,4 +13,14 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Api.AspNetCore\NinjaJournal.Microservice.Api.AspNetCore.csproj" />
+      <ProjectReference Include="..\NinjaJournal.IdentityService.Application\NinjaJournal.IdentityService.Application.csproj" />
+      <ProjectReference Include="..\NinjaJournal.IdentityService.Infrastructure.Postgresql\NinjaJournal.IdentityService.Infrastructure.Postgresql.csproj" />
+    </ItemGroup>
+
 </Project>

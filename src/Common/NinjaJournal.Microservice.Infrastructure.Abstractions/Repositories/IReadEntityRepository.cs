@@ -4,7 +4,7 @@ using Ardalis.Specification;
 
 namespace NinjaJournal.Microservice.Infrastructure.Abstractions.Repositories;
 
-public interface IReadEntityRepository<in TKey, TEntity> where TEntity : BaseEntity<TKey>
+public interface IReadEntityRepository<in TKey, TEntity> where TEntity : IAggregateRoot<TKey>
     where TKey : struct
 {
     Task<IReadOnlyCollection<TEntity>> GetAllAsync(bool disableTracking = true, CancellationToken cancellationToken = default);

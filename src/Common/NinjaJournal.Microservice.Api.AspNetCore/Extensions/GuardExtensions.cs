@@ -7,7 +7,6 @@ public static class GuardExtensions
 {
     public static void NotFoundEntity<TKey, T>(this IGuardClause guardClause, TKey key, T? input) 
         where TKey : struct
-        where T : class
     {
         guardClause.Null(key, nameof(key));
 

@@ -6,7 +6,7 @@ namespace NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore;
 
 public class BaseEntityRepository<TKey, TEntity, TDbContext> : IEntityRepository<TKey, TEntity>
     where TKey : struct
-    where TEntity : BaseEntity<TKey>
+    where TEntity : class, IAggregateRoot<TKey>
     where TDbContext : BaseDbContext<TDbContext>
 {
     private readonly TDbContext _dbContext;

@@ -7,12 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Infrastructure.Abstractions\NinjaJournal.Microservice.Infrastructure.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore\NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\NinjaJournal.IdentityService.Domain\NinjaJournal.IdentityService.Domain.csproj" />
+      <ProjectReference Include="..\NinjaJournal.IdentityService.Infrastructure.Postgresql\NinjaJournal.IdentityService.Infrastructure.Postgresql.csproj" />
     </ItemGroup>
 
 </Project>

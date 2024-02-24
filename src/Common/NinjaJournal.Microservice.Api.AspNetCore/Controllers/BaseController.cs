@@ -18,7 +18,7 @@ namespace NinjaJournal.Microservice.Api.AspNetCore.Controllers;
 [AllowAnonymous]
 public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     where TKey : struct
-    where TEntity : BaseEntity<TKey>
+    where TEntity : IAggregateRoot<TKey>
     where TEntityDto : BaseEntityDto<TKey>
 {
     protected readonly ILogger<BaseController<TKey, TEntity, TEntityDto>> Logger;
