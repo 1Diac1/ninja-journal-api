@@ -13,4 +13,12 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Ocelot" Version="23.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Common\NinjaJournal.Microservice.Api.AspNetCore\NinjaJournal.Microservice.Api.AspNetCore.csproj" />
+    </ItemGroup>
+
 </Project>
