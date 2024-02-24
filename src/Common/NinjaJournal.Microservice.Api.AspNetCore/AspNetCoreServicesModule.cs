@@ -1,15 +1,19 @@
-﻿using NinjaJournal.Microservice.Application.Abstractions.Services;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using NinjaJournal.Microservice.Application.Abstractions.Services;
 using NinjaJournal.Microservice.Api.AspNetCore.Filters;
 using NinjaJournal.Microservice.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using AuthenticationOptions = NinjaJournal.Microservice.Api.AspNetCore.Options.AuthenticationOptions;
 
 namespace NinjaJournal.Microservice.Api.AspNetCore;
 
-public static class AspNetCoreModule
+public static class AspNetCoreServicesModule
 {
-    public static void AddAspNetCoreModule(this IServiceCollection services, IConfiguration configuration)
+    public static void AddAspNetCoreServicesModule(this IServiceCollection services, IConfiguration configuration)
     {
         ConfigureCorsServices(services);
 
@@ -30,9 +34,33 @@ public static class AspNetCoreModule
             .AddNewtonsoftJson();
     }
 
-    private static void ConfigureAuthenticationServices(this IServiceCollection services)
+    public static void AddAuthenticationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        
+        AuthenticationOptions? authenticationOptions =
+            configuration.GetSection("Authentication").Get<AuthenticationOptions>();
+
+        AuthenticationBuilder authenticationBuilder = services
+            .AddAuthentication(authenticationOptions?.Scheme ?? JwtBearerDefaults.AuthenticationScheme);
+    
+        if (authenticationOptions?.JwtBearer is not null)
+        {
+            authenticationBuilder
+                .AddJwtBearer(authenticationOptions.Scheme ?? JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.Authority = authenticationOptions.JwtBearer.Authority;
+                    options.Audience = authenticationOptions.JwtBearer.Audience;
+                    options.RequireHttpsMetadata = authenticationOptions.JwtBearer.RequireHttpsMetadata ?? true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = authenticationOptions.JwtBearer.ValidIssuer ?? authenticationOptions.JwtBearer.Authority
+                    };
+                });
+        }
+    }
+
+    private static void ConfigureAuthorizationServices(this IServiceCollection services)
+    {
+        services.AddAuthorization();
     }
     
     private static void ConfigureRedisServices(IServiceCollection services, IConfiguration configuration)

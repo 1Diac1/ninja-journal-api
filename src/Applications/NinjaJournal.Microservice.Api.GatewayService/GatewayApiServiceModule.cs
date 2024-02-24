@@ -8,7 +8,7 @@ public static class GatewayApiServiceModule
 {
     public static void AddGatewayApiServiceModule(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAspNetCoreModule(configuration);
+        services.AddAspNetCoreServicesModule(configuration);
         
         services.AddControllers();
 
