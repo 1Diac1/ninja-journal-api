@@ -9,12 +9,10 @@ public static class GatewayApiServiceModule
     public static void AddGatewayApiServiceModule(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthenticationServices(configuration);
-        
-        services.AddControllers();
 
-        services.AddOcelot();
+        services.AddControllers();
         
-        services.AddAuthenticationServices(configuration);
+        services.AddOcelot();
     }
 
     public static async Task ConfigureGatewayApiService(this WebApplication app)

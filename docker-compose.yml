@@ -32,6 +32,20 @@ services:
     networks:
       - elastic
 
+  identity-db:
+    container_name: identity-db
+    image: postgres:12
+    environment:
+      - POSTGRES_USER=identity-db
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=identity-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - identity-db-data:/usr/share/postgresql-identity/data
+    networks:
+      - elastic
+
   elasticsearch:
     container_name: elasticsearch
     image: elasticsearch:8.7.1
@@ -73,3 +87,4 @@ networks:
 volumes:
   elasticsearch-data: {}
   students-management-db-data: {} 
+  identity-db-data: {}
