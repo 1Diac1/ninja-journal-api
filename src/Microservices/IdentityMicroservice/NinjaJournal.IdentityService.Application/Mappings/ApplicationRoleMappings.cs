@@ -1,6 +1,6 @@
-﻿using NinjaJournal.IdentityService.Domain.Entities;
+﻿using NinjaJournal.IdentityService.Application.Abstractions.Dtos;
+using NinjaJournal.IdentityService.Domain.Entities;
 using AutoMapper;
-using NinjaJournal.IdentityService.Application.Dtos;
 
 namespace NinjaJournal.IdentityService.Application.Mappings;
 

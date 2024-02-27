@@ -2,7 +2,7 @@
 
 namespace NinjaJournal.Microservice.Core.Helpers;
 
-public static class SuccessMessages
+public class SuccessMessages
 {
     public static string EntityCreated<TKey, TEntity>(TKey id) 
         where TEntity : IAggregateRoot<TKey>

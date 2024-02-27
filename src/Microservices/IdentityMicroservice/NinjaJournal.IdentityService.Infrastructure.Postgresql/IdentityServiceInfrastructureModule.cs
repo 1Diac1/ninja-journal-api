@@ -1,9 +1,9 @@
 ﻿using NinjaJournal.IdentityService.Domain.Entities;
+using NinjaJournal.IdentityService.Domain.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using NinjaJournal.IdentityService.Domain.Identity;
 
 namespace NinjaJournal.IdentityService.Infrastructure.Postgresql;
 

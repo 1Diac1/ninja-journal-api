@@ -15,4 +15,9 @@ public static class ApiRoutes
         public const string Update = StudentsManagementBase + "/{id}";
         public const string Delete = StudentsManagementBase + "/{id}";
     }
+
+    public static class IdentityService
+    {
+        public const string RemoveRoleFromUser = "remove-role";
+    }
 }

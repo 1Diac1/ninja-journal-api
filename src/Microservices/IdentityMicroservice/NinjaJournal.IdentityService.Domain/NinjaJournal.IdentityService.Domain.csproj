@@ -12,11 +12,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Core\NinjaJournal.Microservice.Core.csproj" />
       <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Infrastructure.Abstractions\NinjaJournal.Microservice.Infrastructure.Abstractions.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Extensions\" />
     </ItemGroup>
 
 </Project>

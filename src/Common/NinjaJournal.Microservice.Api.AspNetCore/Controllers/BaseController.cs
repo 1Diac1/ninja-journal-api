@@ -111,7 +111,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     }
     
     [HttpPut]
-    public async Task<BaseResponse> UpdateAsync([FromBody] TEntityDto entityDto, CancellationToken cancellationToken)
+    public virtual async Task<BaseResponse> UpdateAsync([FromBody] TEntityDto entityDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
         Guard.Against.NullOrEmpty(entityDto.Id, nameof(entityDto.Id), ErrorMessages.CantBeNullOrEmpty);
@@ -138,7 +138,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<BaseResponse> DeleteAsync(TKey id, CancellationToken cancellationToken)
+    public virtual async Task<BaseResponse> DeleteAsync(TKey id, CancellationToken cancellationToken)
     {
         Guard.Against.NullOrEmpty(id, nameof(id), ErrorMessages.CantBeNullOrEmpty);
 

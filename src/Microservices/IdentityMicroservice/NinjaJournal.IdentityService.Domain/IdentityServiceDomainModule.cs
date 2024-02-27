@@ -10,5 +10,6 @@ public static class IdentityServiceDomainModule
     public static void AddIdentityServiceDomainModule(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IRoleManager, RoleManager>();
+        services.AddScoped<IUserManager, UserManager>();
     }
 }
