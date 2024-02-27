@@ -15,6 +15,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Infrastructure.Abstractions\NinjaJournal.Microservice.Infrastructure.Abstractions.csproj" />
       <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore\NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\NinjaJournal.IdentityService.Application.Abstractions\NinjaJournal.IdentityService.Application.Abstractions.csproj" />
       <ProjectReference Include="..\NinjaJournal.IdentityService.Domain\NinjaJournal.IdentityService.Domain.csproj" />
       <ProjectReference Include="..\NinjaJournal.IdentityService.Infrastructure.Postgresql\NinjaJournal.IdentityService.Infrastructure.Postgresql.csproj" />
     </ItemGroup>

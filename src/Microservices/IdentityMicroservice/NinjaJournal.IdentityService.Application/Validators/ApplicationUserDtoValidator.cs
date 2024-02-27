@@ -1,5 +1,5 @@
-﻿using NinjaJournal.IdentityService.Application.Dtos;
-using FluentValidation;
+﻿using FluentValidation;
+using NinjaJournal.IdentityService.Application.Dtos;
 
 namespace NinjaJournal.IdentityService.Application.Validators;
 

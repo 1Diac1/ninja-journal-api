@@ -48,6 +48,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.IdentityServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.IdentityService.Infrastructure.Postgresql", "src\Microservices\IdentityMicroservice\NinjaJournal.IdentityService.Infrastructure.Postgresql\NinjaJournal.IdentityService.Infrastructure.Postgresql.csproj", "{10AE1472-0405-4B44-ABE6-26F47099D0BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NinjaJournal.IdentityService.Application.Abstractions", "src\Microservices\IdentityMicroservice\NinjaJournal.IdentityService.Application.Abstractions\NinjaJournal.IdentityService.Application.Abstractions.csproj", "{5CECC05C-3328-4EDF-B3A1-473A71FEE238}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,7 @@ Global
 		{A682ADFA-E17D-44A0-963C-4E57925CB825} = {491C4E7E-0970-44F1-BEA2-5BE23F7B539A}
 		{615B8990-91BF-4964-AC19-B95F19D3327A} = {491C4E7E-0970-44F1-BEA2-5BE23F7B539A}
 		{10AE1472-0405-4B44-ABE6-26F47099D0BE} = {491C4E7E-0970-44F1-BEA2-5BE23F7B539A}
+		{5CECC05C-3328-4EDF-B3A1-473A71FEE238} = {491C4E7E-0970-44F1-BEA2-5BE23F7B539A}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{28E1423C-744E-4269-87AC-431804F0A559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -151,5 +154,9 @@ Global
 		{10AE1472-0405-4B44-ABE6-26F47099D0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10AE1472-0405-4B44-ABE6-26F47099D0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10AE1472-0405-4B44-ABE6-26F47099D0BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CECC05C-3328-4EDF-B3A1-473A71FEE238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CECC05C-3328-4EDF-B3A1-473A71FEE238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CECC05C-3328-4EDF-B3A1-473A71FEE238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CECC05C-3328-4EDF-B3A1-473A71FEE238}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

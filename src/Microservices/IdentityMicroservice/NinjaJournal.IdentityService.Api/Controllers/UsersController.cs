@@ -1,11 +1,11 @@
 ﻿using NinjaJournal.Microservice.Infrastructure.Abstractions.Repositories;
 using NinjaJournal.Microservice.Application.Abstractions.Services;
 using NinjaJournal.Microservice.Api.AspNetCore.Controllers;
-using NinjaJournal.IdentityService.Application.Dtos;
 using NinjaJournal.IdentityService.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using AutoMapper;
+using NinjaJournal.IdentityService.Application.Dtos;
 
 namespace NinjaJournal.IdentityService.Api.Controllers;
 

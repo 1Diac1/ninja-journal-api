@@ -15,4 +15,8 @@
       <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Infrastructure.Abstractions\NinjaJournal.Microservice.Infrastructure.Abstractions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Extensions\" />
+    </ItemGroup>
+
 </Project>
