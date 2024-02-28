@@ -16,27 +16,30 @@ namespace NinjaJournal.Microservice.Api.AspNetCore.Controllers;
 
 [ApiController]
 [AllowAnonymous]
-public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
+public abstract class BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto> : ControllerBase
     where TKey : struct
     where TEntity : IAggregateRoot<TKey>
     where TEntityDto : BaseEntityDto<TKey>
+    where TEntityCreateDto : BaseEntityDto<TKey>
 {
-    protected readonly ILogger<BaseController<TKey, TEntity, TEntityDto>> Logger;
+    protected readonly ILogger<BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto>> Logger;
     protected readonly IReadEntityRepository<TKey, TEntity> ReadEntityRepository;
     protected readonly IEntityRepository<TKey, TEntity> EntityRepository;
     protected readonly IList<ISpecification<TEntity>> Specifications;
+    protected readonly IValidator<TEntityCreateDto> CreateValidator;
     protected readonly IValidator<TEntityDto> Validator;
     protected readonly IRedisCacheService RedisCacheService;
     protected readonly IMapper Mapper;
 
-    protected BaseController(ILogger<BaseController<TKey, TEntity, TEntityDto>> logger,
+    protected BaseController(ILogger<BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto>> logger,
         IReadEntityRepository<TKey, TEntity> readEntityRepository, IEntityRepository<TKey, TEntity> entityRepository,
-        IValidator<TEntityDto> validator, IRedisCacheService redisCacheService, IMapper mapper)
+        IValidator<TEntityDto> validator, IValidator<TEntityCreateDto> createValidator, IRedisCacheService redisCacheService, IMapper mapper)
     {
-        Logger = logger ?? throw new ArgumentException(nameof(ILogger<BaseController<TKey, TEntity, TEntityDto>>));
+        Logger = logger ?? throw new ArgumentException(nameof(ILogger<BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto>>));
         ReadEntityRepository = readEntityRepository ?? throw new ArgumentException(nameof(IReadEntityRepository<TKey, TEntity>));
         EntityRepository = entityRepository ?? throw new ArgumentException(nameof(IEntityRepository<TKey, TEntity>));
         Validator = validator ?? throw new ArgumentException(nameof(IValidator<TEntityDto>));
+        CreateValidator = createValidator ?? throw new ArgumentException(nameof(IValidator<TEntityCreateDto>));
         RedisCacheService = redisCacheService ?? throw new ArgumentException(nameof(IRedisCacheService));
         Mapper = mapper ?? throw new ArgumentException(nameof(IMapper));
         Specifications = new List<ISpecification<TEntity>>();
@@ -92,11 +95,11 @@ public abstract class BaseController<TKey, TEntity, TEntityDto> : ControllerBase
     }
 
     [HttpPost]
-    public virtual async Task<BaseResponse> CreateAsync([FromBody] TEntityDto entityDto, CancellationToken cancellationToken)
+    public virtual async Task<BaseResponse> CreateAsync([FromBody] TEntityCreateDto entityDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
         
-        var validationResult = await Validator.ValidateAsync(entityDto, cancellationToken);
+        var validationResult = await CreateValidator.ValidateAsync(entityDto, cancellationToken);
 
         if (validationResult.IsValid is false)
             throw new ValidationException(validationResult.Errors);

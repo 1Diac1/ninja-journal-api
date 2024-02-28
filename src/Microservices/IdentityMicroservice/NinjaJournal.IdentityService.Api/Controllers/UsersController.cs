@@ -18,27 +18,27 @@ namespace NinjaJournal.IdentityService.Api.Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
-public class UsersController : BaseController<Guid, ApplicationUser, ApplicationUserDto>
+public class UsersController : BaseController<Guid, ApplicationUser, ApplicationUserDto, CreateApplicationUserDto>
 {
     private readonly IUserManager _userManager;
     private readonly IRoleManager _roleManager;
     
-    public UsersController(ILogger<BaseController<Guid, ApplicationUser, ApplicationUserDto>> logger, 
-        IReadEntityRepository<Guid, ApplicationUser> readEntityRepository, IEntityRepository<Guid, ApplicationUser> entityRepository, 
-        IValidator<ApplicationUserDto> validator, IRedisCacheService redisCacheService, IMapper mapper, 
-        IUserManager userManager, IRoleManager roleManager)
-        : base(logger, readEntityRepository, entityRepository, validator, redisCacheService, mapper)
+    public UsersController(ILogger<BaseController<Guid, ApplicationUser, ApplicationUserDto, CreateApplicationUserDto>> logger, 
+        IReadEntityRepository<Guid, ApplicationUser> readEntityRepository, IEntityRepository<Guid, ApplicationUser> entityRepository,
+        IValidator<ApplicationUserDto> validator, IValidator<CreateApplicationUserDto> createValidator, 
+        IRedisCacheService redisCacheService, IMapper mapper, IUserManager userManager, IRoleManager roleManager) 
+        : base(logger, readEntityRepository, entityRepository, validator, createValidator, redisCacheService, mapper)
     {
-        _userManager = userManager;
-        _roleManager = roleManager;
+        _userManager = userManager ?? throw new ArgumentException(nameof(IUserManager));
+        _roleManager = roleManager ?? throw new ArgumentException(nameof(IRoleManager));
     }
-
+        
     [HttpPost]
-    public override async Task<BaseResponse> CreateAsync(ApplicationUserDto entityDto, CancellationToken cancellationToken)
+    public override async Task<BaseResponse> CreateAsync(CreateApplicationUserDto entityDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
         
-        var validationResult = await Validator.ValidateAsync(entityDto, cancellationToken);
+        var validationResult = await CreateValidator.ValidateAsync(entityDto, cancellationToken);
 
         if (validationResult.IsValid is false)
             throw new ValidationException(validationResult.Errors);
@@ -51,6 +51,35 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
 
         Logger.LogInformation(SuccessMessages.EntityCreated<Guid, ApplicationRole>(mappedEntity.Id));
 
+        return BaseResponse.Success();
+    }
+
+    [HttpPut]
+    public override async Task<BaseResponse> UpdateAsync(ApplicationUserDto entityDto, CancellationToken cancellationToken)
+    {
+        Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
+        Guard.Against.NullOrEmpty(entityDto.Id, nameof(entityDto.Id), ErrorMessages.CantBeNullOrEmpty);
+        
+        var validationResult = await Validator.ValidateAsync(entityDto, cancellationToken);
+
+        if (validationResult.IsValid is false)
+            throw new ValidationException(validationResult.Errors);
+
+        var entityToUpdate = await _userManager.FindByIdAsync(entityDto.Id, cancellationToken);
+
+        Guard.Against.NotFoundEntity(entityDto.Id, entityToUpdate);
+
+        Mapper.Map(entityDto, entityToUpdate);
+
+        var result = await _userManager.UpdateAsync(entityToUpdate, cancellationToken);
+        
+        result.Check();
+
+        Logger.LogInformation(SuccessMessages.EntityUpdated<Guid, ApplicationUser>(entityToUpdate.Id));
+        
+        var cacheKey = $"{typeof(ApplicationUser)}:{entityDto.Id}";
+        await RedisCacheService.InvalidateAsync(cacheKey, cancellationToken);
+        
         return BaseResponse.Success();
     }
 

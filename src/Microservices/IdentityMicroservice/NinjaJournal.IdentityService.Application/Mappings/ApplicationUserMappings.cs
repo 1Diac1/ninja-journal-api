@@ -10,5 +10,9 @@ public class ApplicationUserMappings : Profile
     {
         CreateMap<ApplicationUser, ApplicationUserDto>();
         CreateMap<ApplicationUserDto, ApplicationUser>();
+
+        CreateMap<CreateApplicationUserDto, ApplicationUser>()
+            .ForMember(u => u.PasswordHash, opt =>
+                opt.MapFrom(u => u.Password));
     }
 }

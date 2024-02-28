@@ -12,12 +12,13 @@ namespace NinjaJournal.StudentsManagement.Api.Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
-public class StudentsController : BaseController<Guid, Student, StudentDto>
+public class StudentsController : BaseController<Guid, Student, StudentDto, StudentDto>
 {
-    public StudentsController(ILogger<BaseController<Guid, Student, StudentDto>> logger, 
+    public StudentsController(ILogger<BaseController<Guid, Student, StudentDto, StudentDto>> logger, 
         IReadEntityRepository<Guid, Student> readEntityRepository, IEntityRepository<Guid, Student> entityRepository, 
-        IValidator<StudentDto> validator, IRedisCacheService redisCacheService, IMapper mapper) 
-        : base(logger, readEntityRepository, entityRepository, validator, redisCacheService, mapper)
+        IValidator<StudentDto> validator, IValidator<StudentDto> createValidator, 
+        IRedisCacheService redisCacheService, IMapper mapper) 
+        : base(logger, readEntityRepository, entityRepository, validator, createValidator, redisCacheService, mapper)
     {
         Specifications.Add(new StudentIncludeSpecification());
     }

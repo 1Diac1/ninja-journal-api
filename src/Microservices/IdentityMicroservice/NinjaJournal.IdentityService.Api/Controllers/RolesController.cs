@@ -16,14 +16,15 @@ namespace NinjaJournal.IdentityService.Api.Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
-public class RolesController : BaseController<Guid, ApplicationRole, ApplicationRoleDto>
+public class RolesController : BaseController<Guid, ApplicationRole, ApplicationRoleDto, ApplicationRoleDto>
 {
     private readonly IRoleManager _roleManager;
 
-    public RolesController(ILogger<BaseController<Guid, ApplicationRole, ApplicationRoleDto>> logger, 
-        IReadEntityRepository<Guid, ApplicationRole> readEntityRepository, IEntityRepository<Guid, ApplicationRole> entityRepository,
-        IValidator<ApplicationRoleDto> validator, IRedisCacheService redisCacheService, IMapper mapper, IRoleManager roleManager) 
-        : base(logger, readEntityRepository, entityRepository, validator, redisCacheService, mapper)
+    public RolesController(ILogger<BaseController<Guid, ApplicationRole, ApplicationRoleDto, ApplicationRoleDto>> logger, 
+        IReadEntityRepository<Guid, ApplicationRole> readEntityRepository, IEntityRepository<Guid, ApplicationRole> entityRepository, 
+        IValidator<ApplicationRoleDto> validator, IValidator<ApplicationRoleDto> createValidator, 
+        IRedisCacheService redisCacheService, IMapper mapper, IRoleManager roleManager) 
+        : base(logger, readEntityRepository, entityRepository, validator, createValidator, redisCacheService, mapper)
     {
         _roleManager = roleManager ?? throw new ArgumentException(nameof(IRoleManager));
     }

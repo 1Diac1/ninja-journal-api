@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace NinjaJournal.IdentityService.Application.Validators;
 
-public class ApplicationUserDtoValidator : AbstractValidator<ApplicationUserDto>
+public class CreateApplicationUserDtoValidator : AbstractValidator<CreateApplicationUserDto>
 {
-    public ApplicationUserDtoValidator()
+    public CreateApplicationUserDtoValidator()
     {
         RuleFor(u => u.UserName)
             .NotEmpty().WithMessage("{PropertyName} is required.")
@@ -23,5 +23,9 @@ public class ApplicationUserDtoValidator : AbstractValidator<ApplicationUserDto>
         RuleFor(u => u.LastName)
             .NotEmpty().WithMessage("{PropertyName} is required.")
             .Length(2, 50).WithMessage("{PropertyName} must be between 2 and 50 characters.");
+        
+        RuleFor(u => u.Password)
+            .NotEmpty().WithMessage("{PropertyName} is required.")
+            .Length(2, 30).WithMessage("{PropertyName} must be between 2 and 50 characters.");
     }
 }
