@@ -1,6 +1,7 @@
 ﻿using NinjaJournal.Microservice.Infrastructure.Abstractions.Repositories;
 using NinjaJournal.Microservice.Infrastructure.Abstractions.Models;
 using Microsoft.EntityFrameworkCore;
+using NinjaJournal.Microservice.Core.Exceptions;
 
 namespace NinjaJournal.Microservice.Infrastructure.EntityFrameworkCore;
 
@@ -31,7 +32,16 @@ public class BaseEntityRepository<TKey, TEntity, TDbContext> : IEntityRepository
         _dbContext.Set<TEntity>().Entry(entity).State = EntityState.Modified;
 
         if (autoSave is true)
-            await SaveAsync(cancellationToken);
+        {
+            try
+            {
+                await SaveAsync(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException exception)
+            {
+                throw new BadRequestException("Concurrency conflict detected");
+            }
+        }
     }
 
     public virtual async Task DeleteAsync(TEntity entity, bool autoSave = true, CancellationToken cancellationToken = default)

@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\NinjaJournal.Microservice.Core\NinjaJournal.Microservice.Core.csproj" />
       <ProjectReference Include="..\NinjaJournal.Microservice.Infrastructure.Abstractions\NinjaJournal.Microservice.Infrastructure.Abstractions.csproj" />
     </ItemGroup>
 

@@ -10,5 +10,7 @@ public class ApplicationRoleMappings : Profile
     {
         CreateMap<ApplicationRole, ApplicationRoleDto>();
         CreateMap<ApplicationRoleDto, ApplicationRole>();
+
+        CreateMap<CreateApplicationRoleDto, ApplicationRole>();
     }
 }

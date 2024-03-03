@@ -3,7 +3,6 @@ using NinjaJournal.IdentityService.Domain.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 namespace NinjaJournal.IdentityService.Infrastructure.Postgresql;
 
@@ -20,7 +19,7 @@ public static class IdentityServiceInfrastructureModule
             })
             .AddRoles<ApplicationRole>()
             .AddEntityFrameworkStores<IdentityServiceDbContext>()
-            .AddUserManager<UserManager<ApplicationUser>>()
+            .AddUserManager<UserManager>()
             .AddRoleManager<RoleManager>();
     }
 }

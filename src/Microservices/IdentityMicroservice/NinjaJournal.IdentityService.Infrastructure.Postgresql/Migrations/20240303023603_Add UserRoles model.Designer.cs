@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NinjaJournal.IdentityService.Infrastructure.Postgresql;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NinjaJournal.IdentityService.Infrastructure.Postgresql.Migrations
 {
     [DbContext(typeof(IdentityServiceDbContext))]
-    partial class IdentityServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240303023603_Add UserRoles model")]
+    partial class AddUserRolesmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,10 +120,6 @@ namespace NinjaJournal.IdentityService.Infrastructure.Postgresql.Migrations
                     b.Property<Guid?>("ApplicationUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
@@ -128,9 +127,7 @@ namespace NinjaJournal.IdentityService.Infrastructure.Postgresql.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRoles", (string)null);
                 });
 
             modelBuilder.Entity("NinjaJournal.IdentityService.Domain.Entities.UserRole", b =>
@@ -138,18 +135,6 @@ namespace NinjaJournal.IdentityService.Infrastructure.Postgresql.Migrations
                     b.HasOne("NinjaJournal.IdentityService.Domain.Entities.ApplicationUser", null)
                         .WithMany("Roles")
                         .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("NinjaJournal.IdentityService.Domain.Entities.ApplicationRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NinjaJournal.IdentityService.Domain.Entities.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("NinjaJournal.IdentityService.Domain.Entities.ApplicationUser", b =>

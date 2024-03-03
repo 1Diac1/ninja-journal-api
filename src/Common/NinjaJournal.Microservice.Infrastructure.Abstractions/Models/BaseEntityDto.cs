@@ -3,5 +3,5 @@
 public abstract class BaseEntityDto<TKey>
     where TKey : struct
 {
-    public TKey Id { get; set; }
+    public virtual TKey Id { get; set; }
 }

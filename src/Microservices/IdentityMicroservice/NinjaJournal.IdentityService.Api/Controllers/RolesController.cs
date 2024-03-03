@@ -16,13 +16,13 @@ namespace NinjaJournal.IdentityService.Api.Controllers;
 
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
-public class RolesController : BaseController<Guid, ApplicationRole, ApplicationRoleDto, ApplicationRoleDto>
+public class RolesController : BaseController<Guid, ApplicationRole, ApplicationRoleDto, CreateApplicationRoleDto>
 {
     private readonly IRoleManager _roleManager;
 
-    public RolesController(ILogger<BaseController<Guid, ApplicationRole, ApplicationRoleDto, ApplicationRoleDto>> logger, 
+    public RolesController(ILogger<BaseController<Guid, ApplicationRole, ApplicationRoleDto, CreateApplicationRoleDto>> logger, 
         IReadEntityRepository<Guid, ApplicationRole> readEntityRepository, IEntityRepository<Guid, ApplicationRole> entityRepository, 
-        IValidator<ApplicationRoleDto> validator, IValidator<ApplicationRoleDto> createValidator, 
+        IValidator<ApplicationRoleDto> validator, IValidator<CreateApplicationRoleDto> createValidator, 
         IRedisCacheService redisCacheService, IMapper mapper, IRoleManager roleManager) 
         : base(logger, readEntityRepository, entityRepository, validator, createValidator, redisCacheService, mapper)
     {
@@ -30,11 +30,11 @@ public class RolesController : BaseController<Guid, ApplicationRole, Application
     }
 
     [HttpPost]
-    public override async Task<BaseResponse> CreateAsync(ApplicationRoleDto entityDto, CancellationToken cancellationToken)
+    public override async Task<BaseResponse> CreateAsync(CreateApplicationRoleDto entityDto, CancellationToken cancellationToken)
     {
         Guard.Against.Null(entityDto, nameof(entityDto), ErrorMessages.CantBeNullOrEmpty);
         
-        var validationResult = await Validator.ValidateAsync(entityDto, cancellationToken);
+        var validationResult = await CreateValidator.ValidateAsync(entityDto, cancellationToken);
 
         if (validationResult.IsValid is false)
             throw new ValidationException(validationResult.Errors);

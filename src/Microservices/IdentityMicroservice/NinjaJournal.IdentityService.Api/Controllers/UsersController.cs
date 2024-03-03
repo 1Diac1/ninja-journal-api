@@ -87,6 +87,7 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
     [Route(ApiRoutes.IdentityService.RemoveRoleFromUser)]
     public async Task<BaseResponse> RemoveRoleFromUserAsync(RemoveRoleFromUserDto<Guid, Guid> request, CancellationToken cancellationToken)
     {
+        Guard.Against.Null(request, nameof(request), ErrorMessages.CantBeNullOrEmpty);
         Guard.Against.NullOrEmpty(request.UserId, nameof(request.UserId), ErrorMessages.CantBeNullOrEmpty);
         Guard.Against.NullOrEmpty(request.RoleId, nameof(request.RoleId), ErrorMessages.CantBeNullOrEmpty);
 
@@ -98,7 +99,9 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
 
         Guard.Against.NotFoundEntity(request.RoleId, role);
 
-        await _userManager.RemoveFromRoleAsync(user, role.Name, cancellationToken);
+        var result = await _userManager.RemoveFromRoleAsync(user, role.Name, cancellationToken);
+
+        result.Check();
 
         Logger.LogInformation(IdentitySuccessMessages.RoleRemovedFromUser<Guid, Guid>(request.UserId, request.RoleId));
         
