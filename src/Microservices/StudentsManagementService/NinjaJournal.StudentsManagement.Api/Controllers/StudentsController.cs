@@ -1,5 +1,4 @@
-﻿using NinjaJournal.StudentsManagement.Infrastructure.Postgresql.Specifications;
-using NinjaJournal.Microservice.Infrastructure.Abstractions.Repositories;
+﻿using NinjaJournal.Microservice.Infrastructure.Abstractions.Repositories;
 using NinjaJournal.Microservice.Application.Abstractions.Services;
 using NinjaJournal.Microservice.Api.AspNetCore.Controllers;
 using NinjaJournal.StudentsManagement.Application.Dtos;
@@ -7,6 +6,7 @@ using NinjaJournal.StudentsManagement.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using AutoMapper;
+using NinjaJournal.StudentsManagement.Domain.Specifications;
 
 namespace NinjaJournal.StudentsManagement.Api.Controllers;
 

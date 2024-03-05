@@ -20,20 +20,24 @@ namespace NinjaJournal.IdentityService.Api.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class UsersController : BaseController<Guid, ApplicationUser, ApplicationUserDto, CreateApplicationUserDto>
 {
+    private readonly IValidator<ChangeUserPasswordDto<Guid>> _changePasswordDtoValidator;
     private readonly IUserManager _userManager;
     private readonly IRoleManager _roleManager;
     
     public UsersController(ILogger<BaseController<Guid, ApplicationUser, ApplicationUserDto, CreateApplicationUserDto>> logger, 
         IReadEntityRepository<Guid, ApplicationUser> readEntityRepository, IEntityRepository<Guid, ApplicationUser> entityRepository,
         IValidator<ApplicationUserDto> validator, IValidator<CreateApplicationUserDto> createValidator, 
-        IRedisCacheService redisCacheService, IMapper mapper, IUserManager userManager, IRoleManager roleManager) 
+        IRedisCacheService redisCacheService, IMapper mapper, IUserManager userManager, IRoleManager roleManager, 
+        IValidator<ChangeUserPasswordDto<Guid>> changePasswordDtoValidator) 
         : base(logger, readEntityRepository, entityRepository, validator, createValidator, redisCacheService, mapper)
     {
-        ArgumentNullException.ThrowIfNull(nameof(userManager));
-        ArgumentNullException.ThrowIfNull(nameof(roleManager));
+        ArgumentNullException.ThrowIfNull((userManager), nameof(userManager));
+        ArgumentNullException.ThrowIfNull(roleManager, nameof(roleManager));
+        ArgumentNullException.ThrowIfNull(changePasswordDtoValidator, nameof(changePasswordDtoValidator));
 
         _userManager = userManager;
         _roleManager = roleManager;
+        _changePasswordDtoValidator = changePasswordDtoValidator;
     }
     
     [HttpGet]
@@ -78,7 +82,6 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
             throw new ValidationException(validationResult.Errors);
     
         var mappedEntity = Mapper.Map<ApplicationUser>(entityDto);
-
         var result = await _userManager.CreateAsync(mappedEntity, entityDto.Password, cancellationToken);
 
         result.Check();
@@ -116,6 +119,28 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
     }
 
     [HttpPost]
+    [Route(ApiRoutes.IdentityService.ChangePassword)]
+    public async Task<BaseResponse> ChangePasswordAsync(ChangeUserPasswordDto<Guid> request, CancellationToken cancellationToken)
+    {
+        Guard.Against.Null(request, nameof(request), ErrorMessages.CantBeNullOrEmpty);
+        Guard.Against.NullOrEmpty(request.Password, nameof(request.Password), ErrorMessages.CantBeNullOrEmpty);
+        Guard.Against.NullOrEmpty(request.OldPassword, nameof(request.OldPassword), ErrorMessages.CantBeNullOrEmpty);
+        
+        var validationResult = await _changePasswordDtoValidator.ValidateAsync(request, cancellationToken);
+
+        if (validationResult.IsValid is false)
+            throw new ValidationException(validationResult.Errors);
+
+        var user = await _userManager.FindByIdAsync(request.UserId, cancellationToken);
+        Guard.Against.NotFoundEntity(request.UserId, user);
+        
+        var result = await _userManager.ChangePasswordAsync(user!, request.OldPassword, request.Password, cancellationToken);
+        result.Check();
+
+        return BaseResponse.Success();
+    }
+
+    [HttpPost]
     [Route(ApiRoutes.IdentityService.AddRoleToUser)]
     public async Task<BaseResponse> AddRoleToUserAsync(AddRoleToUserDto<Guid, Guid> request, CancellationToken cancellationToken)
     {
@@ -129,7 +154,7 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
         var role = await _roleManager.FindByIdAsync(request.RoleId, cancellationToken);
         Guard.Against.NotFoundEntity(request.RoleId, role);
 
-        var result = await _userManager.AddToRoleAsync(user, role.Name, cancellationToken);
+        var result = await _userManager.AddToRoleAsync(user!, role?.Name!, cancellationToken);
         result.Check();
 
         return BaseResponse.Success();
@@ -149,7 +174,7 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
         var role = await _roleManager.FindByIdAsync(request.RoleId, cancellationToken);
         Guard.Against.NotFoundEntity(request.RoleId, role);
 
-        var result = await _userManager.RemoveFromRoleAsync(user, role.Name, cancellationToken);
+        var result = await _userManager.RemoveFromRoleAsync(user!, role?.Name!, cancellationToken);
         result.Check();
 
         Logger.LogInformation(IdentitySuccessMessages.RoleRemovedFromUser<Guid, Guid>(request.UserId, request.RoleId));

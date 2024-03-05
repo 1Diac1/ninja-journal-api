@@ -22,5 +22,6 @@ public static class ApiRoutes
         public const string AddRoleToUser = "add-role";
         public const string GetUserRoles = "user-roles";
         public const string GetUsersInRole = "users-in-role";
+        public const string ChangePassword = "change-password";
     }
 }

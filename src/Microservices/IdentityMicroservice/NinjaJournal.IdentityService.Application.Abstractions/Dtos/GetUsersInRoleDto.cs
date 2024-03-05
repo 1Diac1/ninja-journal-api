@@ -1,6 +1,6 @@
 ﻿namespace NinjaJournal.IdentityService.Application.Abstractions.Dtos;
 
-public class GetUsersInRoleDto<TKey>
+public class GetUsersInRoleDto<TKeyRole>
 {
-    public TKey RoleId { get; set; }
+    public TKeyRole RoleId { get; set; }
 }
