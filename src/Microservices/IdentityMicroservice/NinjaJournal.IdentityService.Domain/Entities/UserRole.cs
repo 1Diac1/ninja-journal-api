@@ -2,14 +2,13 @@
 
 namespace NinjaJournal.IdentityService.Domain.Entities;
 
-public class UserRole : BaseEntity<Guid>
+public class UserRole : IAggregateRoot<Guid>
 {
-    public Guid UserId { get; protected set; }
-    public Guid RoleId { get; protected set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
     
-    protected internal UserRole(Guid userId, Guid roleId)
-    {
-        UserId = userId;
-        RoleId = roleId;
-    }
+    public Guid UserId { get; set; }
+    public Guid RoleId { get; set; }
+
+    public ApplicationUser User { get; set; }
+    public ApplicationRole Role { get; set; }
 }

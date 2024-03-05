@@ -18,7 +18,8 @@ public static class IdentityServiceInfrastructureModule
                 options.Password.RequiredLength = 8;
             })
             .AddRoles<ApplicationRole>()
-            .AddEntityFrameworkStores<IdentityServiceDbContext>()
+            .AddUserStore<UserStore>()
+            .AddRoleStore<RoleStore>()
             .AddUserManager<UserManager>()
             .AddRoleManager<RoleManager>();
     }

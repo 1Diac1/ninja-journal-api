@@ -21,6 +21,18 @@ public class UserManager : UserManager<ApplicationUser>, IUserManager
 
     protected override CancellationToken CancellationToken => _cancellationToken;
 
+    public async Task<IList<string>> GetRolesAsync(ApplicationUser user, CancellationToken cancellationToken)
+    {
+        _cancellationToken = cancellationToken;
+        return await GetRolesAsync(user);
+    }
+
+    public async Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
+    {
+        _cancellationToken = cancellationToken;
+        return await GetUsersInRoleAsync(roleName);
+    }
+
     public async Task<ApplicationUser?> FindByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         _cancellationToken = cancellationToken;

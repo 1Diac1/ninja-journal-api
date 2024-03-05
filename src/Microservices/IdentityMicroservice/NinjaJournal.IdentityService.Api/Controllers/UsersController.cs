@@ -29,8 +29,42 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
         IRedisCacheService redisCacheService, IMapper mapper, IUserManager userManager, IRoleManager roleManager) 
         : base(logger, readEntityRepository, entityRepository, validator, createValidator, redisCacheService, mapper)
     {
-        _userManager = userManager ?? throw new ArgumentException(nameof(IUserManager));
-        _roleManager = roleManager ?? throw new ArgumentException(nameof(IRoleManager));
+        ArgumentNullException.ThrowIfNull(nameof(userManager));
+        ArgumentNullException.ThrowIfNull(nameof(roleManager));
+
+        _userManager = userManager;
+        _roleManager = roleManager;
+    }
+    
+    [HttpGet]
+    [Route(ApiRoutes.IdentityService.GetUserRoles)]
+    public async Task<DataResponse<IList<string>>> GetUserRolesAsync(GetUserRolesDto<Guid> request, CancellationToken cancellationToken)
+    {
+        Guard.Against.Null(request, nameof(request), ErrorMessages.CantBeNullOrEmpty);
+        Guard.Against.NullOrEmpty(request.UserId, nameof(request.UserId), ErrorMessages.CantBeNullOrEmpty);
+
+        var user = await _userManager.FindByIdAsync(request.UserId, cancellationToken);
+        Guard.Against.NotFoundEntity(request.UserId, user);
+
+        var result = await _userManager.GetRolesAsync(user!, cancellationToken);
+
+        return DataResponse<IList<string>>.Success(result);
+    }
+
+    [HttpGet]
+    [Route(ApiRoutes.IdentityService.GetUsersInRole)]
+    public async Task<DataResponse<IList<ApplicationUserDto>>> GetUsersInRoleAsync(GetUsersInRoleDto<Guid> request, CancellationToken cancellationToken)
+    {
+        Guard.Against.Null(request, nameof(request), ErrorMessages.CantBeNullOrEmpty);
+        Guard.Against.NullOrEmpty(request.RoleId, nameof(request.RoleId), ErrorMessages.CantBeNullOrEmpty);
+        
+        var role = await _roleManager.FindByIdAsync(request.RoleId, cancellationToken);
+        Guard.Against.NotFoundEntity(request.RoleId, role);
+
+        var result = await _userManager.GetUsersInRoleAsync(role.Name, cancellationToken);
+        var mappedUsers = Mapper.Map<IList<ApplicationUserDto>>(result);
+
+        return DataResponse<IList<ApplicationUserDto>>.Success(mappedUsers);
     }
         
     [HttpPost]
@@ -66,13 +100,11 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
             throw new ValidationException(validationResult.Errors);
 
         var entityToUpdate = await _userManager.FindByIdAsync(entityDto.Id, cancellationToken);
-
         Guard.Against.NotFoundEntity(entityDto.Id, entityToUpdate);
 
         Mapper.Map(entityDto, entityToUpdate);
 
         var result = await _userManager.UpdateAsync(entityToUpdate, cancellationToken);
-        
         result.Check();
 
         Logger.LogInformation(SuccessMessages.EntityUpdated<Guid, ApplicationUser>(entityToUpdate.Id));
@@ -84,6 +116,26 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
     }
 
     [HttpPost]
+    [Route(ApiRoutes.IdentityService.AddRoleToUser)]
+    public async Task<BaseResponse> AddRoleToUserAsync(AddRoleToUserDto<Guid, Guid> request, CancellationToken cancellationToken)
+    {
+        Guard.Against.Null(request, nameof(request), ErrorMessages.CantBeNullOrEmpty);
+        Guard.Against.NullOrEmpty(request.UserId, nameof(request.UserId), ErrorMessages.CantBeNullOrEmpty);
+        Guard.Against.NullOrEmpty(request.RoleId, nameof(request.RoleId), ErrorMessages.CantBeNullOrEmpty);
+        
+        var user = await _userManager.FindByIdAsync(request.UserId, cancellationToken);
+        Guard.Against.NotFoundEntity(request.UserId, user);
+        
+        var role = await _roleManager.FindByIdAsync(request.RoleId, cancellationToken);
+        Guard.Against.NotFoundEntity(request.RoleId, role);
+
+        var result = await _userManager.AddToRoleAsync(user, role.Name, cancellationToken);
+        result.Check();
+
+        return BaseResponse.Success();
+    }
+    
+    [HttpPost]
     [Route(ApiRoutes.IdentityService.RemoveRoleFromUser)]
     public async Task<BaseResponse> RemoveRoleFromUserAsync(RemoveRoleFromUserDto<Guid, Guid> request, CancellationToken cancellationToken)
     {
@@ -92,15 +144,12 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
         Guard.Against.NullOrEmpty(request.RoleId, nameof(request.RoleId), ErrorMessages.CantBeNullOrEmpty);
 
         var user = await _userManager.FindByIdAsync(request.UserId, cancellationToken);
-
         Guard.Against.NotFoundEntity(request.UserId, user);
 
         var role = await _roleManager.FindByIdAsync(request.RoleId, cancellationToken);
-
         Guard.Against.NotFoundEntity(request.RoleId, role);
 
         var result = await _userManager.RemoveFromRoleAsync(user, role.Name, cancellationToken);
-
         result.Check();
 
         Logger.LogInformation(IdentitySuccessMessages.RoleRemovedFromUser<Guid, Guid>(request.UserId, request.RoleId));

@@ -18,6 +18,9 @@ public static class IdentityServiceApplicationModule
         services.AddScoped<IEntityRepository<Guid, ApplicationRole>, BaseEntityRepository<Guid, ApplicationRole, IdentityServiceDbContext>>();
         services.AddScoped<IReadEntityRepository<Guid, ApplicationRole>, BaseReadEntityRepository<Guid, ApplicationRole, IdentityServiceDbContext>>();
 
+        services.AddScoped<IEntityRepository<Guid, UserRole>, BaseEntityRepository<Guid, UserRole, IdentityServiceDbContext>>();
+        services.AddScoped<IReadEntityRepository<Guid, UserRole>, BaseReadEntityRepository<Guid, UserRole, IdentityServiceDbContext>>();
+        
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
     }

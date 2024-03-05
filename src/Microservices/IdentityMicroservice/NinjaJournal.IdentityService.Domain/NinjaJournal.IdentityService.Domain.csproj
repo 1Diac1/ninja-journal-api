@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Api.AspNetCore\NinjaJournal.Microservice.Api.AspNetCore.csproj" />
       <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Core\NinjaJournal.Microservice.Core.csproj" />
       <ProjectReference Include="..\..\..\Common\NinjaJournal.Microservice.Infrastructure.Abstractions\NinjaJournal.Microservice.Infrastructure.Abstractions.csproj" />
     </ItemGroup>

@@ -8,8 +8,18 @@ public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
 {
     public void Configure(EntityTypeBuilder<UserRole> builder)
     {
-        builder.HasKey(ur => new { ur.UserId, ur.RoleId });
-        builder.HasOne<ApplicationUser>().WithMany().HasForeignKey(ur => ur.UserId).IsRequired();
-        builder.HasOne<ApplicationRole>().WithMany().HasForeignKey(ur => ur.RoleId).IsRequired();
+        builder.HasKey(e => new { e.UserId, e.RoleId });
+        
+        builder.HasOne(d => d.User)
+            .WithMany()
+            .HasForeignKey(d => d.UserId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade); // Настрой связь в соответствии с твоими требованиями
+
+        builder.HasOne(d => d.Role)
+            .WithMany()
+            .HasForeignKey(d => d.RoleId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

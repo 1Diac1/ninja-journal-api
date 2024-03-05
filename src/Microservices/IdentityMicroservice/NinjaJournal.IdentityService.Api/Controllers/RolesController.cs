@@ -26,7 +26,9 @@ public class RolesController : BaseController<Guid, ApplicationRole, Application
         IRedisCacheService redisCacheService, IMapper mapper, IRoleManager roleManager) 
         : base(logger, readEntityRepository, entityRepository, validator, createValidator, redisCacheService, mapper)
     {
-        _roleManager = roleManager ?? throw new ArgumentException(nameof(IRoleManager));
+        ArgumentNullException.ThrowIfNull(nameof(roleManager));
+
+        _roleManager = roleManager;
     }
 
     [HttpPost]

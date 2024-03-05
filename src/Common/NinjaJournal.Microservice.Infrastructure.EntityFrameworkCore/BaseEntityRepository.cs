@@ -39,7 +39,7 @@ public class BaseEntityRepository<TKey, TEntity, TDbContext> : IEntityRepository
             }
             catch (DbUpdateConcurrencyException exception)
             {
-                throw new BadRequestException("Concurrency conflict detected");
+                throw new BadRequestException("Concurrency conflict detected during update operation");
             }
         }
     }
@@ -49,7 +49,16 @@ public class BaseEntityRepository<TKey, TEntity, TDbContext> : IEntityRepository
         _dbContext.Set<TEntity>().Remove(entity);
 
         if (autoSave is true)
-            await SaveAsync(cancellationToken);
+        {
+            try
+            {
+                await SaveAsync(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException exception)
+            {
+                throw new BadRequestException("Concurrency conflict detected during delete operation", exception);
+            }
+        }
     }
 
     public virtual async Task SaveAsync(CancellationToken cancellationToken = default)

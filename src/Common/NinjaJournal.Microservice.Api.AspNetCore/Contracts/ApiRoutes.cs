@@ -19,5 +19,8 @@ public static class ApiRoutes
     public static class IdentityService
     {
         public const string RemoveRoleFromUser = "remove-role";
+        public const string AddRoleToUser = "add-role";
+        public const string GetUserRoles = "user-roles";
+        public const string GetUsersInRole = "users-in-role";
     }
 }
