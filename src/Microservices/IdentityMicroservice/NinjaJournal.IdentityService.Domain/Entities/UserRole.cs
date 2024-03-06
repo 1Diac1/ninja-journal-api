@@ -2,7 +2,7 @@
 
 namespace NinjaJournal.IdentityService.Domain.Entities;
 
-public class UserRole : IAggregateRoot<Guid>
+public class UserRole : IAggregateRoot<Guid>, ICacheableEntity<Guid>
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     

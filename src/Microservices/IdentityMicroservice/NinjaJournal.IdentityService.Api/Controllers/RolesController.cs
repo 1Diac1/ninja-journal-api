@@ -21,15 +21,15 @@ public class RolesController : BaseController<Guid, ApplicationRole, Application
     private readonly IRoleManager _roleManager;
 
     public RolesController(ILogger<BaseController<Guid, ApplicationRole, ApplicationRoleDto, CreateApplicationRoleDto>> logger, 
-        IReadEntityRepository<Guid, ApplicationRole> readEntityRepository, IEntityRepository<Guid, ApplicationRole> entityRepository, 
-        IValidator<ApplicationRoleDto> validator, IValidator<CreateApplicationRoleDto> createValidator, 
-        IRedisCacheService redisCacheService, IMapper mapper, IRoleManager roleManager) 
-        : base(logger, readEntityRepository, entityRepository, validator, createValidator, redisCacheService, mapper)
+        IReadEntityRepository<Guid, ApplicationRole> readEntityRepository, IEntityRepository<Guid, ApplicationRole> entityRepository,
+        IValidator<CreateApplicationRoleDto> createValidator, IRedisCacheService redisCacheService, 
+        IValidator<ApplicationRoleDto> validator, ICacheKeyService cacheKeyService, IMapper mapper, IRoleManager roleManager) 
+        : base(logger, readEntityRepository, entityRepository, createValidator, redisCacheService, validator, cacheKeyService, mapper)
     {
-        ArgumentNullException.ThrowIfNull(nameof(roleManager));
-
+        ArgumentNullException.ThrowIfNull(roleManager, nameof(roleManager));
+        
         _roleManager = roleManager;
-    }
+    }  
 
     [HttpPost]
     public override async Task<BaseResponse> CreateAsync(CreateApplicationRoleDto entityDto, CancellationToken cancellationToken)

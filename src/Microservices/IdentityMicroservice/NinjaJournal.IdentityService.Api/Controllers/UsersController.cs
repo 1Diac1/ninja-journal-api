@@ -26,20 +26,20 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
     
     public UsersController(ILogger<BaseController<Guid, ApplicationUser, ApplicationUserDto, CreateApplicationUserDto>> logger, 
         IReadEntityRepository<Guid, ApplicationUser> readEntityRepository, IEntityRepository<Guid, ApplicationUser> entityRepository,
-        IValidator<ApplicationUserDto> validator, IValidator<CreateApplicationUserDto> createValidator, 
-        IRedisCacheService redisCacheService, IMapper mapper, IUserManager userManager, IRoleManager roleManager, 
-        IValidator<ChangeUserPasswordDto<Guid>> changePasswordDtoValidator) 
-        : base(logger, readEntityRepository, entityRepository, validator, createValidator, redisCacheService, mapper)
+        IValidator<CreateApplicationUserDto> createValidator, IRedisCacheService redisCacheService, 
+        IValidator<ApplicationUserDto> validator, ICacheKeyService cacheKeyService, IMapper mapper, 
+        IValidator<ChangeUserPasswordDto<Guid>> changePasswordDtoValidator, IUserManager userManager, IRoleManager roleManager) 
+        : base(logger, readEntityRepository, entityRepository, createValidator, redisCacheService, validator, cacheKeyService, mapper)
     {
-        ArgumentNullException.ThrowIfNull((userManager), nameof(userManager));
-        ArgumentNullException.ThrowIfNull(roleManager, nameof(roleManager));
         ArgumentNullException.ThrowIfNull(changePasswordDtoValidator, nameof(changePasswordDtoValidator));
-
+        ArgumentNullException.ThrowIfNull(userManager, nameof(userManager));
+        ArgumentNullException.ThrowIfNull(roleManager, nameof(roleManager));
+        
+        _changePasswordDtoValidator = changePasswordDtoValidator;
         _userManager = userManager;
         _roleManager = roleManager;
-        _changePasswordDtoValidator = changePasswordDtoValidator;
     }
-    
+
     [HttpGet]
     [Route(ApiRoutes.IdentityService.GetUserRoles)]
     public async Task<DataResponse<IList<string>>> GetUserRolesAsync(GetUserRolesDto<Guid> request, CancellationToken cancellationToken)

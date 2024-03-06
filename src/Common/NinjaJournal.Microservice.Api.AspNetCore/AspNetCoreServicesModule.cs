@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AuthenticationOptions = NinjaJournal.Microservice.Api.AspNetCore.Options.AuthenticationOptions;
 using NinjaJournal.Microservice.Application.Abstractions.Services;
 using NinjaJournal.Microservice.Api.AspNetCore.Filters;
 using NinjaJournal.Microservice.Application.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using AuthenticationOptions = NinjaJournal.Microservice.Api.AspNetCore.Options.AuthenticationOptions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace NinjaJournal.Microservice.Api.AspNetCore;
 
@@ -25,6 +25,7 @@ public static class AspNetCoreServicesModule
             options.SuppressModelStateInvalidFilter = true);
 
         services.AddScoped<IRedisCacheService, RedisCacheService>();
+        services.AddScoped<ICacheKeyService, CacheKeyService>();
         
         services.AddControllers(options =>
         {
