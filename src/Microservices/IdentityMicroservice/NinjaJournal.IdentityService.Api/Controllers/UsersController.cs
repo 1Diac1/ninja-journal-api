@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Ardalis.GuardClauses;
 using FluentValidation;
 using AutoMapper;
+using Microsoft.Extensions.Options;
+using NinjaJournal.Microservice.Api.AspNetCore.Options;
 
 namespace NinjaJournal.IdentityService.Api.Controllers;
 
@@ -24,12 +26,13 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
     private readonly IUserManager _userManager;
     private readonly IRoleManager _roleManager;
     
-    public UsersController(ILogger<BaseController<Guid, ApplicationUser, ApplicationUserDto, CreateApplicationUserDto>> logger, 
-        IReadEntityRepository<Guid, ApplicationUser> readEntityRepository, IEntityRepository<Guid, ApplicationUser> entityRepository,
+    public UsersController(ILogger<BaseController<Guid, ApplicationUser, ApplicationUserDto, CreateApplicationUserDto>> logger,
+        IReadEntityRepository<Guid, ApplicationUser> readEntityRepository, IEntityRepository<Guid, ApplicationUser> entityRepository, 
         IValidator<CreateApplicationUserDto> createValidator, IRedisCacheService redisCacheService, 
-        IValidator<ApplicationUserDto> validator, ICacheKeyService cacheKeyService, IMapper mapper, 
-        IValidator<ChangeUserPasswordDto<Guid>> changePasswordDtoValidator, IUserManager userManager, IRoleManager roleManager) 
-        : base(logger, readEntityRepository, entityRepository, createValidator, redisCacheService, validator, cacheKeyService, mapper)
+        IValidator<ApplicationUserDto> validator, ICacheKeyService cacheKeyService, IOptions<CacheOptions> cacheOptions, 
+        IMapper mapper, IValidator<ChangeUserPasswordDto<Guid>> changePasswordDtoValidator,
+        IUserManager userManager, IRoleManager roleManager) 
+        : base(logger, readEntityRepository, entityRepository, createValidator, redisCacheService, validator, cacheKeyService, cacheOptions, mapper)
     {
         ArgumentNullException.ThrowIfNull(changePasswordDtoValidator, nameof(changePasswordDtoValidator));
         ArgumentNullException.ThrowIfNull(userManager, nameof(userManager));
@@ -65,7 +68,7 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
         var role = await _roleManager.FindByIdAsync(request.RoleId, cancellationToken);
         Guard.Against.NotFoundEntity(request.RoleId, role);
 
-        var result = await _userManager.GetUsersInRoleAsync(role.Name, cancellationToken);
+        var result = await _userManager.GetUsersInRoleAsync(role?.Name!, cancellationToken);
         var mappedUsers = Mapper.Map<IList<ApplicationUserDto>>(result);
 
         return DataResponse<IList<ApplicationUserDto>>.Success(mappedUsers);
@@ -83,7 +86,6 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
     
         var mappedEntity = Mapper.Map<ApplicationUser>(entityDto);
         var result = await _userManager.CreateAsync(mappedEntity, entityDto.Password, cancellationToken);
-
         result.Check();
 
         Logger.LogInformation(SuccessMessages.EntityCreated<Guid, ApplicationRole>(mappedEntity.Id));
@@ -107,13 +109,20 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
 
         Mapper.Map(entityDto, entityToUpdate);
 
-        var result = await _userManager.UpdateAsync(entityToUpdate, cancellationToken);
+        var result = await _userManager.UpdateAsync(entityToUpdate!, cancellationToken);
         result.Check();
 
-        Logger.LogInformation(SuccessMessages.EntityUpdated<Guid, ApplicationUser>(entityToUpdate.Id));
+        Logger.LogInformation(SuccessMessages.EntityUpdated<Guid, ApplicationUser>(entityToUpdate!.Id));
         
-        var cacheKey = $"{typeof(ApplicationUser)}:{entityDto.Id}";
+        var cacheKey = CacheKeyService.GenerateCacheKey<Guid, ApplicationUser>(CacheKeyRoutes.Get, entityDto.Id); 
+        var cachedEntity = await RedisCacheService.GetAsync<ApplicationUserDto>(cacheKey, cancellationToken);
+
+        if (cachedEntity is null)
+            return BaseResponse.Success();
+        
         await RedisCacheService.InvalidateAsync(cacheKey, cancellationToken);
+        
+        Logger.LogInformation(SuccessMessages.DataDeletedFromCache<Guid, ApplicationUser>(entityDto.Id, cacheKey));
         
         return BaseResponse.Success();
     }
@@ -137,6 +146,8 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
         var result = await _userManager.ChangePasswordAsync(user!, request.OldPassword, request.Password, cancellationToken);
         result.Check();
 
+        Logger.LogInformation(IdentitySuccessMessages.PasswordChanged(request.UserId));
+
         return BaseResponse.Success();
     }
 
@@ -157,6 +168,8 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
         var result = await _userManager.AddToRoleAsync(user!, role?.Name!, cancellationToken);
         result.Check();
 
+        Logger.LogInformation(IdentitySuccessMessages.AddRoleToUser<Guid, Guid>(request.UserId, request.RoleId));
+        
         return BaseResponse.Success();
     }
     
@@ -178,10 +191,7 @@ public class UsersController : BaseController<Guid, ApplicationUser, Application
         result.Check();
 
         Logger.LogInformation(IdentitySuccessMessages.RoleRemovedFromUser<Guid, Guid>(request.UserId, request.RoleId));
-        
-        var cacheKey = $"{typeof(ApplicationUser)}:{request.UserId}";
-        await RedisCacheService.InvalidateAsync(cacheKey, cancellationToken);
-        
+
         return BaseResponse.Success();
     }
 }

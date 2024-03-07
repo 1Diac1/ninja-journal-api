@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
+using NinjaJournal.Microservice.Api.AspNetCore.Options;
 
 namespace NinjaJournal.Microservice.Api.AspNetCore;
 
@@ -24,6 +25,8 @@ public static class AspNetCoreServicesModule
         services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
 
+        services.Configure<CacheOptions>(configuration.GetSection("CacheOptions"));
+        
         services.AddScoped<IRedisCacheService, RedisCacheService>();
         services.AddScoped<ICacheKeyService, CacheKeyService>();
         

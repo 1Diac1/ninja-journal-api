@@ -11,6 +11,6 @@ public static class ErrorMessages
         where TEntity : IAggregateRoot<TKey>
         where TKey : struct
     {
-        return $"Property ({property}) for entity ({typeof(TEntity)} can't be null";
+        return $"Property '{property}' for entity '{typeof(TEntity)}' can't be null";
     }
 }

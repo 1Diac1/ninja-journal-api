@@ -3,14 +3,17 @@ using NinjaJournal.Microservice.Application.Abstractions.Services;
 using NinjaJournal.IdentityService.Application.Abstractions.Dtos;
 using NinjaJournal.Microservice.Api.AspNetCore.Controllers;
 using NinjaJournal.Microservice.Api.AspNetCore.Extensions;
+using NinjaJournal.Microservice.Api.AspNetCore.Options;
 using NinjaJournal.IdentityService.Domain.Interfaces;
 using NinjaJournal.IdentityService.Domain.Extensions;
 using NinjaJournal.IdentityService.Domain.Entities;
 using NinjaJournal.Microservice.Core.Helpers;
+using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Ardalis.GuardClauses;
 using FluentValidation;
 using AutoMapper;
+using NinjaJournal.Microservice.Api.AspNetCore.Contracts;
 
 namespace NinjaJournal.IdentityService.Api.Controllers;
 
@@ -21,16 +24,16 @@ public class RolesController : BaseController<Guid, ApplicationRole, Application
     private readonly IRoleManager _roleManager;
 
     public RolesController(ILogger<BaseController<Guid, ApplicationRole, ApplicationRoleDto, CreateApplicationRoleDto>> logger, 
-        IReadEntityRepository<Guid, ApplicationRole> readEntityRepository, IEntityRepository<Guid, ApplicationRole> entityRepository,
-        IValidator<CreateApplicationRoleDto> createValidator, IRedisCacheService redisCacheService, 
-        IValidator<ApplicationRoleDto> validator, ICacheKeyService cacheKeyService, IMapper mapper, IRoleManager roleManager) 
-        : base(logger, readEntityRepository, entityRepository, createValidator, redisCacheService, validator, cacheKeyService, mapper)
+        IReadEntityRepository<Guid, ApplicationRole> readEntityRepository, IEntityRepository<Guid, ApplicationRole> entityRepository, 
+        IValidator<CreateApplicationRoleDto> createValidator, IRedisCacheService redisCacheService, IValidator<ApplicationRoleDto> validator,
+        ICacheKeyService cacheKeyService, IOptions<CacheOptions> cacheOptions, IMapper mapper, IRoleManager roleManager)
+        : base(logger, readEntityRepository, entityRepository, createValidator, redisCacheService, validator, cacheKeyService, cacheOptions, mapper)
     {
         ArgumentNullException.ThrowIfNull(roleManager, nameof(roleManager));
         
         _roleManager = roleManager;
-    }  
-
+    }
+    
     [HttpPost]
     public override async Task<BaseResponse> CreateAsync(CreateApplicationRoleDto entityDto, CancellationToken cancellationToken)
     {
@@ -44,7 +47,6 @@ public class RolesController : BaseController<Guid, ApplicationRole, Application
         var mappedEntity = Mapper.Map<ApplicationRole>(entityDto);
 
         var result = await _roleManager.CreateAsync(mappedEntity, cancellationToken);
-
         result.Check();
 
         Logger.LogInformation(SuccessMessages.EntityCreated<Guid, ApplicationRole>(mappedEntity.Id));
@@ -69,14 +71,20 @@ public class RolesController : BaseController<Guid, ApplicationRole, Application
 
         Mapper.Map(entityDto, entityToUpdate);
 
-        var result = await _roleManager.UpdateAsync(entityToUpdate, cancellationToken);
-        
+        var result = await _roleManager.UpdateAsync(entityToUpdate!, cancellationToken);
         result.Check();
 
-        Logger.LogInformation(SuccessMessages.EntityUpdated<Guid, ApplicationRole>(entityToUpdate.Id));
+        Logger.LogInformation(SuccessMessages.EntityUpdated<Guid, ApplicationRole>(entityToUpdate!.Id));
         
-        var cacheKey = $"{typeof(ApplicationRole)}:{entityDto.Id}";
+        var cacheKey = CacheKeyService.GenerateCacheKey<Guid, ApplicationRole>(CacheKeyRoutes.Get, entityDto.Id); 
+        var cachedEntity = await RedisCacheService.GetAsync<ApplicationRoleDto>(cacheKey, cancellationToken);
+
+        if (cachedEntity is null)
+            return BaseResponse.Success();
+        
         await RedisCacheService.InvalidateAsync(cacheKey, cancellationToken);
+        
+        Logger.LogInformation(SuccessMessages.DataDeletedFromCache<Guid, ApplicationRole>(entityDto.Id, cacheKey));
         
         return BaseResponse.Success();
     }

@@ -12,6 +12,8 @@ using Ardalis.GuardClauses;
 using Ardalis.Specification;
 using FluentValidation;
 using AutoMapper;
+using Microsoft.Extensions.Options;
+using NinjaJournal.Microservice.Api.AspNetCore.Options;
 
 namespace NinjaJournal.Microservice.Api.AspNetCore.Controllers;
 
@@ -31,13 +33,13 @@ public abstract class BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto
     protected readonly IRedisCacheService RedisCacheService;
     protected readonly IValidator<TEntityDto> Validator;
     protected readonly ICacheKeyService CacheKeyService;
+    protected readonly CacheOptions CacheOptions;
     protected readonly IMapper Mapper;
-
-
+    
     protected BaseController(ILogger<BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto>> logger, 
         IReadEntityRepository<TKey, TEntity> readEntityRepository, IEntityRepository<TKey, TEntity> entityRepository, 
         IValidator<TEntityCreateDto> createValidator, IRedisCacheService redisCacheService, 
-        IValidator<TEntityDto> validator, ICacheKeyService cacheKeyService, IMapper mapper)
+        IValidator<TEntityDto> validator, ICacheKeyService cacheKeyService, IOptions<CacheOptions> cacheOptions, IMapper mapper)
     {
         ArgumentNullException.ThrowIfNull(logger, nameof(logger));
         ArgumentNullException.ThrowIfNull(mapper, nameof(mapper));
@@ -51,6 +53,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto
         Logger = logger;
         Mapper = mapper;
         Validator = validator;
+        CacheOptions = cacheOptions.Value;
         CacheKeyService = cacheKeyService;
         CreateValidator = createValidator;
         EntityRepository = entityRepository;
@@ -58,7 +61,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto
         ReadEntityRepository = readEntityRepository;
         Specifications = new List<ISpecification<TEntity>>();
     }
-
+    
     [HttpGet]
     public virtual async Task<DataResponse<IReadOnlyCollection<TEntityDto>>> GetAllAsync(int limit, CancellationToken cancellationToken)
     {
@@ -69,7 +72,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto
 
         if (cachedEntities is not null)
         {
-            Logger.LogInformation($"Data was retrieved from the cache: {cacheKey}");
+            Logger.LogInformation(SuccessMessages.DataRetrievedFromCache<TEntity>(cacheKey));
             return DataResponse<IReadOnlyCollection<TEntityDto>>.Success(cachedEntities);
         }
         
@@ -80,7 +83,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto
 
         await RedisCacheService.SetAsync(cacheKey, mappedEntities, TimeSpan.FromSeconds(7200), cancellationToken);
         
-        return DataResponse<IReadOnlyCollection<TEntityDto>>.Success(mappedEntities);
+        return DataResponse<IReadOnlyCollection<TEntityDto>>.Success(mappedEntities!);
     }
 
     [HttpGet("{id}")]
@@ -93,7 +96,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto
 
         if (cachedEntity is not null)
         {
-            Logger.LogInformation($"Data was retrieved from the cache: {cacheKey}");
+            Logger.LogInformation(SuccessMessages.DataRetrievedFromCache<TKey, TEntity>(id, cacheKey));
             return DataResponse<TEntityDto>.Success(cachedEntity);
         }
 
@@ -101,9 +104,9 @@ public abstract class BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto
         Guard.Against.NotFoundEntity(id, entity);
         
         var mappedEntity = Mapper.Map<TEntityDto>(entity);
-        await RedisCacheService.SetAsync(cacheKey, mappedEntity, TimeSpan.FromSeconds(7200), cancellationToken);
+        await RedisCacheService.SetAsync(cacheKey, mappedEntity, TimeSpan.FromSeconds(CacheOptions.Lifetime), cancellationToken);
         
-        return DataResponse<TEntityDto>.Success(mappedEntity);
+        return DataResponse<TEntityDto>.Success(mappedEntity!);
     }
 
     [HttpPost]
@@ -151,7 +154,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto
         
         await RedisCacheService.InvalidateAsync(cacheKey, cancellationToken);
         
-        Logger.LogInformation($"Data was deleted from the cache: {cacheKey}");
+        Logger.LogInformation(SuccessMessages.DataDeletedFromCache<TKey, TEntity>(entityDto.Id, cacheKey));
         
         return DataResponse<TEntityDto>.Success(cachedEntity);
     }
@@ -176,7 +179,7 @@ public abstract class BaseController<TKey, TEntity, TEntityDto, TEntityCreateDto
         
         await RedisCacheService.InvalidateAsync(cacheKey, cancellationToken);
         
-        Logger.LogInformation($"Data was deleted from the cache: {cacheKey}");
+        Logger.LogInformation(SuccessMessages.DataDeletedFromCache<TKey, TEntity>(id, cacheKey));
         
         return DataResponse<TEntityDto>.Success(cachedEntity);
     }
