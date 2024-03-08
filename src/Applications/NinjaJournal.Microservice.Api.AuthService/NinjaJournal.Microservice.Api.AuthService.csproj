@@ -16,11 +16,13 @@
     <ItemGroup>
       <PackageReference Include="IdentityServer4" Version="4.1.2" />
       <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.1.2" />
-      <PackageReference Include="IdentityServer4.EntityFramework" Version="4.1.2" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\Common\NinjaJournal.Microservice.Core\NinjaJournal.Microservice.Core.csproj" />
+      <ProjectReference Include="..\..\Microservices\IdentityMicroservice\NinjaJournal.IdentityService.Application\NinjaJournal.IdentityService.Application.csproj" />
+      <ProjectReference Include="..\..\Microservices\IdentityMicroservice\NinjaJournal.IdentityService.Domain\NinjaJournal.IdentityService.Domain.csproj" />
+      <ProjectReference Include="..\..\Microservices\IdentityMicroservice\NinjaJournal.IdentityService.Infrastructure.Postgresql\NinjaJournal.IdentityService.Infrastructure.Postgresql.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,9 +1,12 @@
+using NinjaJournal.Microservice.Api.AuthService;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.ConfigureServicesAuthService(builder.Configuration);
 
 var app = builder.Build();
 
-app.MapControllers();
+app.PreConfigureAuthService();
+app.ConfigureAuthService();
 
 app.Run();

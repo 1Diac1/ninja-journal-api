@@ -17,7 +17,7 @@ public static class GatewayApiServiceModule
 
     public static async Task ConfigureGatewayApiService(this WebApplication app)
     {
-        app.ConfigureAuthentication();
+        app.Configure();
         
         await app.UseOcelot();
     }
